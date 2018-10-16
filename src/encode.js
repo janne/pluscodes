@@ -20,7 +20,9 @@ const encodeAxis = (length, value) => R.compose(
   R.reduce(digitReducer, { value, posValue: 20, result: [] }),
 )([...Array(length)])
 
-const interleave = R.compose(
+const interleave = length => R.compose(
+  R.join(''),
+  R.insert(length - 2, '+'),
   R.flatten,
   R.zip,
 )
@@ -28,13 +30,10 @@ const interleave = R.compose(
 const encode = (coordinates, length = 10) => {
   if (!isValid(coordinates)) return null
   const { longitude, latitude } = R.map(parse, coordinates)
-  const lat = encodeAxis(length / 2, latitude + 90)
-  const lon = encodeAxis(length / 2, longitude + 180)
-  return R.compose(
-    R.join(''),
-    R.insert(length - 2, '+'),
-    interleave,
-  )(lat, lon)
+  return interleave(length)(
+    encodeAxis(length / 2, latitude + 90),
+    encodeAxis(length / 2, longitude + 180),
+  )
 }
 
 module.exports = encode
