@@ -1,4 +1,4 @@
-const encode = ({longitude, latitude}) => {}
-const decode = (code) => {}
+const encode = coordinates => undefined
+const decode = code => undefined
 
 module.exports = { encode, decode }
