@@ -1,4 +1,5 @@
 ## Overview
+
 Implementation of [plus.codes](https://plus.codes) in JavaScript.
 
 ## Usage
@@ -6,15 +7,15 @@ Implementation of [plus.codes](https://plus.codes) in JavaScript.
 ### Encoding
 
 ```javascript
-const { encode } = require('pluscodes')
-encode({longitude: '59.327593', latitude: '18.054399' }) // 9FFW83G3+XP
+const { encode } = require("pluscodes")
+encode({ longitude: "18.054312", latitude: "59.327438" }) // 9FFW83G3+XP
 ```
 
 ### Decoding
 
 ```javascript
-const { encode } = require('pluscodes')
-decode('9FFW83G3+XP') // {longitude: '59.327593', latitude: '18.054399' }
+const { encode } = require("pluscodes")
+decode("9FFW83G3+XP") // {longitude: '18.054312', latitude: '59.327438' }
 ```
 
 ## Author
