@@ -1,6 +1,5 @@
 const R = require('ramda')
-
-const digits = '23456789CFGHJMPQRVWX'
+const { digits } = require('./constants')
 
 const isValid = R.allPass([
   R.compose(
