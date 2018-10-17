@@ -5,12 +5,12 @@ const digits = '23456789CFGHJMPQRVWX'
 const isValid = R.allPass([
   R.compose(
     R.equals(11),
-    R.length,
+    R.length
   ),
-  R.is(String),
+  R.is(String)
 ])
 
-const decode = (code) => {
+const decode = code => {
   if (!isValid(code)) return null
   return {}
 }
