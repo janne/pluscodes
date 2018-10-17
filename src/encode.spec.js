@@ -1,7 +1,7 @@
 const { encode } = require('.')
 
-const latitude = '59.327438'
-const longitude = '18.054312'
+const latitude = '59.332438'
+const longitude = '18.118813'
 
 it('should return null if the input is undefined', () => {
   expect(encode()).toEqual(null)
@@ -18,16 +18,16 @@ it("should return null if the input doesn't contain longitude and latitude", () 
 })
 
 it('calculates the correct pluscode', () => {
-  expect(encode({ latitude, longitude })).toEqual('9FFW83G3+XP')
+  expect(encode({ latitude, longitude })).toEqual('9FFW84J9+XG')
 })
 
 it('wraps on longitude above 180°', () => {
-  expect(encode({ latitude, longitude: longitude + 360 })).toEqual('9FFW83G3+XP')
+  expect(encode({ latitude, longitude: longitude + 360 })).toEqual('9FFW84J9+XG')
 })
 
 it('clamps latitudes below -90', () => {
-  expect(encode({ latitude: '-90.0', longitude })).toEqual('2F2W2323+2P')
-  expect(encode({ latitude: '-90.1', longitude })).toEqual('2F2W2323+2P')
+  expect(encode({ latitude: '-90.0', longitude })).toEqual('2F2W2429+2G')
+  expect(encode({ latitude: '-90.1', longitude })).toEqual('2F2W2429+2G')
 })
 
 it('has length 11 by default', () => {
@@ -40,8 +40,8 @@ it('it supports sending length and adds 1 (the plus)', () => {
 })
 
 it('adds zero padding on lengths below 8', () => {
-  expect(encode({ latitude, longitude }, 8)).toEqual('9FFW83G3+')
-  expect(encode({ latitude, longitude }, 6)).toEqual('9FFW8300+')
+  expect(encode({ latitude, longitude }, 8)).toEqual('9FFW84J9+')
+  expect(encode({ latitude, longitude }, 6)).toEqual('9FFW8400+')
   expect(encode({ latitude, longitude }, 4)).toEqual('9FFW0000+')
   expect(encode({ latitude, longitude }, 2)).toEqual('9F000000+')
 })

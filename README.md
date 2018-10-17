@@ -8,14 +8,14 @@ Implementation of [plus.codes](https://plus.codes) in Javascript.
 
 ```javascript
 const { encode } = require('pluscodes')
-encode({ longitude: '18.054312', latitude: '59.327438' }) // '9FFW83G3+XP'
+encode({ latitude: '59.332438', longitude: '18.118813' }) // '9FFW84J9+XG'
 ```
 
 ### Decoding
 
 ```javascript
 const { decode } = require('pluscodes')
-decode('9FFW83G3+XP') // {longitude: '18.054312', latitude: '59.327438' }
+decode('9FFW84J9+XG') // { latitude: '59.332438', longitude: '18.118813' }
 ```
 
 ## Author
