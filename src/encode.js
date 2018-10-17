@@ -11,20 +11,22 @@ const digitReducer = ({ value, result, posValue }) => {
   return {
     value: value - q * posValue,
     posValue: posValue / 20,
-    result: [...result, digits.charAt(q)],
+    result: [...result, digits.charAt(q)]
   }
 }
 
-const encodeAxis = (length, value) => R.compose(
+const encodeAxis = (length, value) =>
+  R.compose(
   R.prop('result'),
-  R.reduce(digitReducer, { value, posValue: 20, result: [] }),
+    R.reduce(digitReducer, { value, posValue: 20, result: [] })
 )([...Array(length)])
 
-const interleave = length => R.compose(
+const interleave = length =>
+  R.compose(
   R.join(''),
   R.insert(length - 2, '+'),
   R.flatten,
-  R.zip,
+    R.zip
 )
 
 const encode = (coordinates, length = 10) => {
