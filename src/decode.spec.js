@@ -14,6 +14,12 @@ it('returns null for invalid length', () => {
   expect(decode('23456789CFGH')).toEqual(null) // 12
 })
 
+it('returns null for invalid digits', () => {
+  expect(decode('1AB')).toEqual(null)
+  expect(decode('9FFW83G3-XP')).toEqual(null)
+  expect(decode('  9FFW83G3+XP  ')).toEqual(null)
+})
+
 it('decodes the plus code', () => {
   expect(decode('9FFW83G3+XP')).toEqual({ latitude: '59.327375', longitude: '18.054250' })
 })
