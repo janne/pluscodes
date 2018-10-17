@@ -17,24 +17,34 @@ const digitReducer = ({ value, result, posValue }) => {
 
 const encodeAxis = (length, value) =>
   R.compose(
-  R.prop('result'),
+    R.prop('result'),
     R.reduce(digitReducer, { value, posValue: 20, result: [] })
-)([...Array(length)])
+  )([...Array(length)])
 
 const interleave = length =>
   R.compose(
-  R.join(''),
-  R.insert(length - 2, '+'),
-  R.flatten,
+    R.join(''),
+    R.insert(length - 2, '+'),
+    R.flatten,
     R.zip
+  )
+
+const normalizeLatitude = R.compose(
+  R.add(90),
+  R.clamp(-90, 90)
+)
+
+const normalizeLongitude = R.compose(
+  R.add(180),
+  R.clamp(-180, 180)
 )
 
 const encode = (coordinates, length = 10) => {
   if (!isValid(coordinates)) return null
   const { longitude, latitude } = R.map(parse, coordinates)
   return interleave(length)(
-    encodeAxis(length / 2, latitude + 90),
-    encodeAxis(length / 2, longitude + 180),
+    encodeAxis(length / 2, normalizeLatitude(latitude)),
+    encodeAxis(length / 2, normalizeLongitude(longitude))
   )
 }
 
