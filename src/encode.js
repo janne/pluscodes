@@ -30,13 +30,13 @@ const interleave = length =>
   )
 
 const normalizeLatitude = R.compose(
-  R.add(90),
-  R.clamp(-90, 90)
+  R.clamp(0, 180),
+  R.add(90)
 )
 
 const normalizeLongitude = R.compose(
-  R.add(180),
-  R.clamp(-180, 180)
+  R.modulo(R.__, 360),
+  R.add(180)
 )
 
 const encode = (coordinates, length = 10) => {
