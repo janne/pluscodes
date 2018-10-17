@@ -15,20 +15,18 @@ const digitReducer = ({ value, result, posValue }) => {
   }
 }
 
-const arrayOf = (length, value) => [...Array(length)].map(R.always(value))
-
 const encodeAxis = (length, value) =>
   R.compose(
     R.prop('result'),
     R.reduce(digitReducer, { value, posValue: 20, result: [] })
-  )(arrayOf(length))
+  )(R.repeat(undefined, length))
 
 const interleave = length =>
   R.compose(
     R.join(''),
     R.insert(8, '+'),
     R.flatten,
-    R.append(length > 8 ? [] : arrayOf(8 - length, '0')),
+    R.append(length > 8 ? [] : R.repeat('0', 8 - length)),
     R.zip
   )
 
