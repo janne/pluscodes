@@ -23,3 +23,7 @@ it('returns null for invalid digits', () => {
 it('decodes the plus code', () => {
   expect(decode('9FFW83G3+XP')).toEqual({ latitude: '59.327375', longitude: '18.054250' })
 })
+
+it('decodes codes ending with +', () => {
+  expect(decode('9FFW83G3+')).toEqual({ latitude: '59.325000', longitude: '18.052500' })
+})
