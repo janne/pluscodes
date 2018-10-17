@@ -26,4 +26,7 @@ it('decodes the plus code', () => {
 
 it('decodes codes ending with +', () => {
   expect(decode('9FFW83G3+')).toEqual({ latitude: '59.325000', longitude: '18.052500' })
+  expect(decode('9FFW8300+')).toEqual({ latitude: '59.300000', longitude: '18.050000' })
+  expect(decode('9FFW0000+')).toEqual({ latitude: '59.000000', longitude: '18.000000' })
+  expect(decode('9F000000+')).toEqual({ latitude: '50.000000', longitude: '0.000000' })
 })
