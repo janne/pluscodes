@@ -16,7 +16,7 @@ it('returns null for invalid length', () => {
 
 it('returns null for invalid digits', () => {
   expect(decode('1AB')).toEqual(null)
-  expect(decode('9FFW83G3-XP')).toEqual(null)
+  expect(decode('9FFW84J9-XG')).toEqual(null)
   expect(decode('  9FFW84J9+XG  ')).toEqual(null)
 })
 
