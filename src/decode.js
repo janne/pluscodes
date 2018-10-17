@@ -28,9 +28,20 @@ const decodeAxis = R.compose(
   digitsToValues
 )
 
+const adjust = code => axis => {
+  const length =
+    R.compose(
+      R.reject(R.equals('+')),
+      R.reject(R.equals('0'))
+    )(code).length / 2
+  const width = R.reduce(a => a / 20, 20, R.repeat(undefined, length - 1))
+  return axis + width / 2
+}
+
 const decode = code => {
   if (!isValid(code)) return null
   const [lat, lon] = R.compose(
+    R.map(adjust(code)),
     R.map(R.prop('result')),
     R.map(decodeAxis),
     R.map(R.map(R.head)),
