@@ -1,7 +1,7 @@
 const R = require('ramda')
 const { digits } = require('./constants')
 
-const regexp = `^[${digits}]{8}[+]([${digits}]{2})?$`
+const regexp = `^[${digits}0]{8}[+]([${digits}0]{2})?$`
 
 const matchesDigits = str => Boolean(String(str).match(regexp))
 
@@ -17,7 +17,7 @@ const isValid = R.allPass([
 const mapIndexed = R.addIndex(R.map)
 
 const axisReducer = ({ result, posValue }, value) => ({
-  result: result + posValue * value,
+  result: result + posValue * (value === -1 ? 0 : value),
   posValue: posValue / 20
 })
 
