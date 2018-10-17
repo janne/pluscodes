@@ -1,7 +1,10 @@
 const R = require('ramda')
 const { digits } = require('./constants')
 
+const matchesDigits = str => Boolean(String(str).match(`^[${digits}+]*$`))
+
 const isValid = R.allPass([
+  matchesDigits,
   R.compose(
     R.equals(11),
     R.length
