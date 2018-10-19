@@ -3,7 +3,8 @@ const encode = require('./encode')
 const decode = require('./decode')
 const { digits } = require('./constants')
 
-const regexp = `^[${digits}]{2}([${digits}]{2})?([${digits}]{2})?[+][${digits}]{2}$`
+const pair = `[${digits}]{2}`
+const regexp = `^${pair}(${pair})?(${pair})?[+]${pair}$`
 const matchesDigits = str => Boolean(String(str).match(regexp))
 
 const isValid = R.allPass([matchesDigits, R.is(String)])
