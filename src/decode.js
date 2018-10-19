@@ -1,18 +1,11 @@
 const R = require('ramda')
 const { digits } = require('./constants')
 
-const regexp = `^[${digits}0]{8}[+]([${digits}0]{2})?$`
+const regexp = `^[${digits}0]{8}[+]([${digits}]{2})?$`
 
 const matchesDigits = str => Boolean(String(str).match(regexp))
 
-const isValid = R.allPass([
-  matchesDigits,
-  R.compose(
-    R.anyPass([R.equals(9), R.equals(11)]),
-    R.length
-  ),
-  R.is(String)
-])
+const isValid = R.allPass([matchesDigits, R.is(String)])
 
 const mapIndexed = R.addIndex(R.map)
 
