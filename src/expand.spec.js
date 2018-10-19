@@ -7,5 +7,7 @@ it('returns null for full codes', () => {
 })
 
 it('expands the codes', () => {
+  expect(expand('J9+XG', coords)).toEqual('9FFW84J9+XG')
   expect(expand('84J9+XG', coords)).toEqual('9FFW84J9+XG')
+  expect(expand('FW84J9+XG', coords)).toEqual('9FFW84J9+XG')
 })
