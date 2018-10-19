@@ -27,8 +27,7 @@ const resolution = code => {
       R.reject(R.equals('+')),
       R.reject(R.equals('0'))
     )(code).length / 2
-  const width = R.reduce(a => a / 20, 20, R.repeat(undefined, length - 1))
-  return width
+  return 20 / Math.pow(20, length - 1)
 }
 
 const decode = code => {
