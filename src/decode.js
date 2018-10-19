@@ -28,20 +28,21 @@ const decodeAxis = R.compose(
   digitsToValues
 )
 
-const adjust = code => axis => {
+const resolution = code => {
   const length =
     R.compose(
       R.reject(R.equals('+')),
       R.reject(R.equals('0'))
     )(code).length / 2
   const width = R.reduce(a => a / 20, 20, R.repeat(undefined, length - 1))
-  return axis + width / 2
+  return width
 }
 
 const decode = code => {
   if (!isValid(code)) return null
+  const res = resolution(code)
   const [lat, lon] = R.compose(
-    R.map(adjust(code)),
+    R.map(R.add(res / 2)),
     R.map(R.prop('result')),
     R.map(decodeAxis),
     R.map(R.map(R.head)),
@@ -49,7 +50,11 @@ const decode = code => {
     mapIndexed((digit, idx) => [digit, idx]),
     R.reject(R.equals('+'))
   )(code)
-  return R.map(axis => axis.toFixed(6), { latitude: lat - 90, longitude: lon - 180 })
+  const coords = R.map(axis => axis.toFixed(6), {
+    latitude: lat - 90,
+    longitude: lon - 180
+  })
+  return R.assoc('resolution', res, coords)
 }
 
 module.exports = decode

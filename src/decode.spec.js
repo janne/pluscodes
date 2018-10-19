@@ -1,7 +1,5 @@
 const decode = require('./decode')
 
-const coords = { latitude: '59.332438', longitude: '18.118813' }
-
 it('returns null for non-string input', () => {
   expect(decode()).toEqual(null)
   expect(decode(42)).toEqual(null)
@@ -21,12 +19,32 @@ it('returns null for invalid digits', () => {
 })
 
 it('decodes the plus code', () => {
-  expect(decode('9FFW84J9+XG')).toEqual(coords)
+  expect(decode('9FFW84J9+XG')).toEqual({
+    latitude: '59.332438',
+    longitude: '18.118813',
+    resolution: 0.000125
+  })
 })
 
 it('decodes codes ending with +', () => {
-  expect(decode('9FFW84J9+')).toEqual({ latitude: '59.331250', longitude: '18.118750' })
-  expect(decode('9FFW8400+')).toEqual({ latitude: '59.325000', longitude: '18.125000' })
-  expect(decode('9FFW0000+')).toEqual({ latitude: '59.500000', longitude: '18.500000' })
-  expect(decode('9F000000+')).toEqual({ latitude: '60.000000', longitude: '10.000000' })
+  expect(decode('9FFW84J9+')).toEqual({
+    latitude: '59.331250',
+    longitude: '18.118750',
+    resolution: 0.0025
+  })
+  expect(decode('9FFW8400+')).toEqual({
+    latitude: '59.325000',
+    longitude: '18.125000',
+    resolution: 0.05
+  })
+  expect(decode('9FFW0000+')).toEqual({
+    latitude: '59.500000',
+    longitude: '18.500000',
+    resolution: 1
+  })
+  expect(decode('9F000000+')).toEqual({
+    latitude: '60.000000',
+    longitude: '10.000000',
+    resolution: 20
+  })
 })
