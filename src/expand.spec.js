@@ -7,7 +7,8 @@ it('returns null for full codes', () => {
 })
 
 it('expands the codes', () => {
-  expect(expand('J9+XG', coords)).toEqual('9FFW84J9+XG')
-  expect(expand('84J9+XG', coords)).toEqual('9FFW84J9+XG')
-  expect(expand('FW84J9+XG', coords)).toEqual('9FFW84J9+XG')
+  const refCoords = { latitude: '59.329394', longitude: '18.068712' }
+  expect(expand('FW84J9+XG', refCoords)).toEqual('9FFW84J9+XG')
+  expect(expand('84J9+XG', refCoords)).toEqual('9FFW84J9+XG')
+  expect(expand('J9+XG', refCoords)).toEqual('9FFW83J9+XG') // westward
 })
