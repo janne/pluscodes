@@ -9,7 +9,8 @@ const matchesDigits = str => Boolean(String(str).match(regexp))
 
 const isValid = R.allPass([matchesDigits, R.is(String)])
 
-const adjust = (axis, refAxis, resolution) => {
+const adjust = (...args) => {
+  const [axis, refAxis, resolution] = args.map(parseFloat)
   if (axis > refAxis + resolution / 2) return axis - resolution
   if (axis < refAxis - resolution / 2) return axis + resolution
   return axis
@@ -27,8 +28,8 @@ const expand = (shortCode, ref) => {
   const resolution = Math.pow(20, 2 - prefixLength / 2)
 
   return encode({
-    latitude: adjust(latitude, parseFloat(ref.latitude), resolution),
-    longitude: adjust(longitude, parseFloat(ref.longitude), resolution)
+    latitude: adjust(latitude, ref.latitude, resolution),
+    longitude: adjust(longitude, ref.longitude, resolution)
   })
 }
 
