@@ -26,9 +26,9 @@ decode('9FFW0000+') // { latitude: '59.500000', longitude: '18.500000', resoluti
 
 ```javascript
 const { expand } = require('pluscodes')
-expand('FW84J9+XG', { latitude: '59.332438', longitude: '18.118813' }) // '9FFW84J9+XG'
-expand('84J9+XG', { latitude: '59.332438', longitude: '18.118813' }) // '9FFW84J9+XG'
-expand('J9+XG', { latitude: '59.332438', longitude: '18.118813' }) // '9FFW84J9+XG'
+expand('FW84J9+XG', { latitude: '59.329394', longitude: '18.068712' }) // '9FFW84J9+XG'
+expand('84J9+XG', { latitude: '59.329394', longitude: '18.068712' }) // '9FFW84J9+XG'
+expand('J9+XG', { latitude: '59.329394', longitude: '18.068712' }) // '9FFW83J9+XG'
 ```
 
 ## Author
