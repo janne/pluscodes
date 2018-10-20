@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/janne/pluscodes/issues"
   },
-  "homepage": "https://github.com/janne/pluscodes#readme",
+  "homepage": "https://runkit.com/janne/5bcba8213b24aa0012bc615b",
   "devDependencies": {
     "eslint": "^5.7.0",
     "eslint-config-airbnb-base": "^13.1.0",
