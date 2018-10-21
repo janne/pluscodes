@@ -4,7 +4,7 @@ Implementation of [plus codes](https://plus.codes) in Javascript. See a descript
 
 ## Usage
 
-![Diagram](diagram.svg)
+![Diagram](diagram.svg?sanitize=true)
 
 ### Encoding
 
