@@ -31,6 +31,14 @@ expand('84J9+XG', { latitude: '59.329394', longitude: '18.068712' }) // '9FFW84J
 expand('J9+XG', { latitude: '59.329394', longitude: '18.068712' }) // '9FFW83J9+XG'
 ```
 
+### Shortening codes
+
+```javascript
+const { shorten } = require('pluscodes')
+shorten('9FFW84J9+XG', { latitude: '59.329394', longitude: '18.068712' }) // '84J9+XG'
+shorten('9FFW84J9+XG', { latitude: '62.248996', longitude: '15.325620' }) // 'FW84J9+XG'
+```
+
 ## Author
 
 Jan Andersson, jan.andersson@gmail.com

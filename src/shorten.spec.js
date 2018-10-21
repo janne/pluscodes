@@ -11,10 +11,14 @@ it('returns full code on invalid reference', () => {
   expect(shorten(code, {})).toEqual(code)
 })
 
-it('returns the full code on a distance reference', () => {
-  expect(shorten(code, { latitude: ref.latitude, longitude: ref.longitude + 180 })).toEqual(code)
-})
-
 it('returns the shortened code on a local reference', () => {
   expect(shorten(code, ref)).toEqual('84J9+XG')
+})
+
+it('returns the shortened code on a national reference', () => {
+  expect(shorten(code, { latitude: '62.248996', longitude: '15.325620' })).toEqual('FW84J9+XG')
+})
+
+it('returns the full code on a global reference', () => {
+  expect(shorten(code, { latitude: 59.329394, longitude: -162.068712 })).toEqual(code)
 })
