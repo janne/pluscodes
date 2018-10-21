@@ -1,6 +1,6 @@
 {
   "name": "pluscodes",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Library to encode and decode plus codes",
   "main": "src/index.js",
   "scripts": {
