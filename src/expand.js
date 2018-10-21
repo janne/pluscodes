@@ -24,7 +24,10 @@ const expand = (shortCode, ref) => {
   if (!prefixedCode) return null
 
   const code = `${prefixedCode.slice(0, prefixLength)}${shortCode}`
-  const { latitude, longitude } = decode(code)
+  const coords = decode(code)
+  if (!coords) return null
+
+  const { latitude, longitude } = coords
   const resolution = Math.pow(20, 2 - prefixLength / 2)
 
   return encode({
