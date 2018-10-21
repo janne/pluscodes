@@ -4,7 +4,7 @@ const decode = require('./decode')
 const { digits } = require('./constants')
 
 const pair = `[${digits}]{2}`
-const regexp = `^${pair}(${pair})?(${pair})?[+]${pair}$`
+const regexp = `^${pair}(${pair})?(${pair})?(${pair})?[+]${pair}$`
 const matchesDigits = str => Boolean(String(str).match(regexp))
 
 const isValid = R.allPass([matchesDigits, R.is(String)])
@@ -17,9 +17,9 @@ const adjust = (...args) => {
 }
 
 const expand = (shortCode, ref) => {
-  if (!isValid(shortCode)) return null
-
   const prefixLength = 11 - shortCode.length
+  if (prefixLength === 0) return shortCode
+
   const prefixedCode = encode(ref, prefixLength)
   if (!prefixedCode) return null
 
