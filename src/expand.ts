@@ -6,9 +6,7 @@ import { Coord } from './interfaces'
 
 const pair = `[${digits}]{2}`
 const regexp = `^${pair}(${pair})?(${pair})?(${pair})?[+]${pair}$`
-const matchesDigits = (str: string): boolean => Boolean(String(str).match(regexp))
-
-const isValid: boolean = R.allPass([matchesDigits, R.is(String)])
+const isValid = (str: string): boolean => Boolean(String(str).match(regexp))
 
 const adjust = (axis: number, refAxis: number, resolution: number): number => {
   if (axis > refAxis + resolution / 2) return axis - resolution
@@ -17,6 +15,9 @@ const adjust = (axis: number, refAxis: number, resolution: number): number => {
 }
 
 const expand = (shortCode: string, ref: Coord): string => {
+  if (!shortCode || !ref) return null
+  if (!isValid(shortCode)) return null
+
   const prefixLength = 11 - shortCode.length
   if (prefixLength === 0) return shortCode
 
