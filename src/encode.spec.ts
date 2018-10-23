@@ -1,20 +1,10 @@
 import encode from './encode'
 
-const latitude = '59.332438'
-const longitude = '18.118813'
+const latitude = 59.332438
+const longitude = 18.118813
 
 it('should return null if the input is undefined', () => {
   expect(encode(undefined)).toEqual(null)
-})
-
-it('should return null if the input is not an object', () => {
-  expect(encode('foo')).toEqual(null)
-})
-
-it("should return null if the input doesn't contain longitude and latitude", () => {
-  expect(encode({})).toEqual(null)
-  expect(encode({ longitude: '' })).toEqual(null)
-  expect(encode({ latitude: '' })).toEqual(null)
 })
 
 it('calculates the correct pluscode', () => {
@@ -26,8 +16,8 @@ it('wraps on longitude above 180°', () => {
 })
 
 it('clamps latitudes below -90', () => {
-  expect(encode({ latitude: '-90.0', longitude })).toEqual('2F2W2429+2G')
-  expect(encode({ latitude: '-90.1', longitude })).toEqual('2F2W2429+2G')
+  expect(encode({ latitude: -90.0, longitude })).toEqual('2F2W2429+2G')
+  expect(encode({ latitude: -90.1, longitude })).toEqual('2F2W2429+2G')
 })
 
 it('has length 11 by default', () => {

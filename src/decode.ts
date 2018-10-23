@@ -1,27 +1,29 @@
-import R from 'ramda'
+import * as R from 'ramda'
 import { digits } from './constants'
+import { Coord } from './interfaces'
 
 const regexp = `^[${digits}0]{8}[+]([${digits}]{2})?$`
 
-const matchesDigits = str => Boolean(String(str).match(regexp))
+const matchesDigits = (str: string) => Boolean(str.match(regexp))
 
 const isValid = R.allPass([matchesDigits, R.is(String)])
 
 const mapIndexed = R.addIndex(R.map)
 
-const axisReducer = ({ result, posValue }, value) => ({
+const axisReducer = ({ result, posValue }, value: number) => ({
   result: result + posValue * (value === -1 ? 0 : value),
   posValue: posValue / 20
 })
 
-const digitsToValues = R.map(R.indexOf(R.__, digits))
+const digitsToValues: number[] = R.map(R.flip(R.indexOf)(digits))
 
-const decodeAxis = R.compose(
+const decodeAxis: number = R.compose(
+  R.prop('result'),
   R.reduce(axisReducer, { result: 0, posValue: 20 }),
   digitsToValues
 )
 
-const resolution = code => {
+const resolution = (code: string): number => {
   const length =
     R.compose(
       R.reject(R.equals('+')),
@@ -30,12 +32,11 @@ const resolution = code => {
   return 20 / Math.pow(20, length - 1)
 }
 
-const decode = code => {
+const decode = (code: string): Coord => {
   if (!isValid(code)) return null
   const res = resolution(code)
   const [lat, lon] = R.compose(
     R.map(R.add(res / 2)),
-    R.map(R.prop('result')),
     R.map(decodeAxis),
     R.map(R.map(R.head)),
     R.partition(([digit, idx]) => idx % 2 === 0),

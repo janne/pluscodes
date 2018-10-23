@@ -1,22 +1,22 @@
-import R from 'ramda'
+import * as R from 'ramda'
 import encode from './encode'
 import decode from './decode'
 import { digits } from './constants'
+import { Coord } from './interfaces'
 
 const pair = `[${digits}]{2}`
 const regexp = `^${pair}(${pair})?(${pair})?(${pair})?[+]${pair}$`
-const matchesDigits = str => Boolean(String(str).match(regexp))
+const matchesDigits = (str: string): boolean => Boolean(String(str).match(regexp))
 
-const isValid = R.allPass([matchesDigits, R.is(String)])
+const isValid: boolean = R.allPass([matchesDigits, R.is(String)])
 
-const adjust = (...args) => {
-  const [axis, refAxis, resolution] = args.map(parseFloat)
+const adjust = (axis: number, refAxis: number, resolution: number): number => {
   if (axis > refAxis + resolution / 2) return axis - resolution
   if (axis < refAxis - resolution / 2) return axis + resolution
   return axis
 }
 
-const expand = (shortCode, ref) => {
+const expand = (shortCode: string, ref: Coord): string => {
   const prefixLength = 11 - shortCode.length
   if (prefixLength === 0) return shortCode
 

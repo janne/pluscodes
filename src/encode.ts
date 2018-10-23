@@ -1,9 +1,8 @@
-import R from 'ramda'
+import * as R from 'ramda'
 import { digits } from './constants'
+import { Coord } from './interfaces'
 
 const isValid = R.allPass([R.is(Object), R.has('longitude'), R.has('latitude')])
-
-const parse = value => (R.is(String, value) ? parseFloat(value) : value)
 
 const digitReducer = ({ value, result, posValue }) => {
   const q = Math.floor(value / posValue)
@@ -14,13 +13,13 @@ const digitReducer = ({ value, result, posValue }) => {
   }
 }
 
-const encodeAxis = (length, value) =>
+const encodeAxis = (length: number, value: number): number =>
   R.compose(
     R.prop('result'),
     R.reduce(digitReducer, { value, posValue: 20, result: [] })
   )(R.repeat(undefined, length))
 
-const interleave = length =>
+const interleave = (length: number) =>
   R.compose(
     R.join(''),
     R.insert(8, '+'),
@@ -35,17 +34,16 @@ const normalizeLatitude = R.compose(
 )
 
 const normalizeLongitude = R.compose(
-  R.modulo(R.__, 360),
+  R.flip(R.modulo)(360),
   R.add(180)
 )
 
-const encode = (coordinates, length = 10) => {
+const encode = (coord: Coord, length: number = 10): string => {
   if (length < 2 || length > 10 || length % 2 !== 0) return null
-  if (!isValid(coordinates)) return null
-  const { longitude, latitude } = R.map(parse, coordinates)
+  if (!isValid(coord)) return null
   return interleave(length)(
-    encodeAxis(length / 2, normalizeLatitude(latitude)),
-    encodeAxis(length / 2, normalizeLongitude(longitude))
+    encodeAxis(length / 2, normalizeLatitude(coord.latitude)),
+    encodeAxis(length / 2, normalizeLongitude(coord.longitude))
   )
 }
 
