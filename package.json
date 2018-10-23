@@ -2,9 +2,11 @@
   "name": "pluscodes",
   "version": "1.2.2",
   "description": "Library to encode and decode plus codes",
-  "main": "src/index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
