@@ -6,7 +6,9 @@ import { Coord } from './interfaces'
 
 const pair = `[${digits}]{2}`
 const regexp = `^${pair}(${pair})?(${pair})?(${pair})?[+]${pair}$`
-const isValid = (str: string): boolean => Boolean(String(str).match(regexp))
+
+const matchesDigits = (str: string): boolean => Boolean(String(str).match(regexp))
+const isValid = R.allPass([R.is(String), matchesDigits])
 
 const adjust = (axis: number, refAxis: number, resolution: number): number => {
   if (axis > refAxis + resolution / 2) return axis - resolution
