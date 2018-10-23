@@ -5,5 +5,5 @@
     "declaration": true,
     "outDir": "./dist"
   },
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 }
