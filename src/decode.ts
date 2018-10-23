@@ -4,7 +4,9 @@ import { Area } from './interfaces'
 
 const regexp = `^[${digits}0]{8}[+]([${digits}]{2})?$`
 
-const isValid = (str: string) => Boolean(str.match(regexp))
+const matchesDigits = (str: string): boolean => Boolean(String(str).match(regexp))
+
+const isValid = R.allPass([matchesDigits, R.is(String)])
 
 const mapIndexed = R.addIndex(R.map)
 
@@ -31,7 +33,6 @@ const resolution = (code: string): number => {
 }
 
 const decode = (code: string): Area => {
-  if (!code) return null
   if (!isValid(code)) return null
   const res = resolution(code)
   const [lat, lon] = R.compose(
