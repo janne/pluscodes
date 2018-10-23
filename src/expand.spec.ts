@@ -1,4 +1,4 @@
-const expand = require('./expand')
+import expand from './expand'
 
 const coords = { latitude: '59.331250', longitude: '18.118750' }
 

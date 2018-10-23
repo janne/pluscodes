@@ -1,7 +1,7 @@
-const R = require('ramda')
-const encode = require('./encode')
-const decode = require('./decode')
-const { digits } = require('./constants')
+import R from 'ramda'
+import encode from './encode'
+import decode from './decode'
+import { digits } from './constants'
 
 const pair = `[${digits}]{2}`
 const regexp = `^${pair}(${pair})?(${pair})?(${pair})?[+]${pair}$`
@@ -36,4 +36,4 @@ const expand = (shortCode, ref) => {
   })
 }
 
-module.exports = expand
+export default expand

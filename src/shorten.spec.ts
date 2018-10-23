@@ -1,4 +1,4 @@
-const shorten = require('./shorten')
+import shorten from './shorten'
 
 const ref = { latitude: 59.329394, longitude: 18.068712 }
 const code = '9FFW84J9+XG'

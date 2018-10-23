@@ -1,5 +1,5 @@
-const R = require('ramda')
-const { digits } = require('./constants')
+import R from 'ramda'
+import { digits } from './constants'
 
 const isValid = R.allPass([R.is(Object), R.has('longitude'), R.has('latitude')])
 
@@ -49,4 +49,4 @@ const encode = (coordinates, length = 10) => {
   )
 }
 
-module.exports = encode
+export default encode

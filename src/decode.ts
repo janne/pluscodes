@@ -1,5 +1,5 @@
-const R = require('ramda')
-const { digits } = require('./constants')
+import R from 'ramda'
+import { digits } from './constants'
 
 const regexp = `^[${digits}0]{8}[+]([${digits}]{2})?$`
 
@@ -49,4 +49,4 @@ const decode = code => {
   return R.assoc('resolution', res, coords)
 }
 
-module.exports = decode
+export default decode
