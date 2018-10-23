@@ -6,7 +6,8 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
-    "build": "tsc"
+    "build": "tsc",
+    "build:watch": "tsc -w"
   },
   "repository": {
     "type": "git",
