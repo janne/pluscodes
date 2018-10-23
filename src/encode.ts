@@ -2,6 +2,8 @@ import * as R from 'ramda'
 import { digits } from './constants'
 import { Coord } from './interfaces'
 
+const isValid = R.allPass([R.is(Object), R.has('longitude'), R.has('latitude')])
+
 const digitReducer = ({ value, result, posValue }) => {
   const q = Math.floor(value / posValue)
   return {
@@ -38,7 +40,7 @@ const normalizeLongitude = R.compose(
 
 const encode = (coord: Coord, length: number = 10): string => {
   if (length < 2 || length > 10 || length % 2 !== 0) return null
-  if (!coord) return null
+  if (!isValid(coord)) return null
   return interleave(length)(
     encodeAxis(length / 2, normalizeLatitude(coord.latitude)),
     encodeAxis(length / 2, normalizeLongitude(coord.longitude))
