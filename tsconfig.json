@@ -3,7 +3,10 @@
     "target": "es5",
     "module": "commonjs",
     "declaration": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "sourceMap": true,
+    "strictNullChecks": true
   },
-  "exclude": ["node_modules", "dist"]
+  "include": ["src/**/*"],
+  "exclude": ["src/**/*.spec.ts", "node_modules"]
 }
