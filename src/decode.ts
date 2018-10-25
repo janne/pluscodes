@@ -32,7 +32,7 @@ const resolution = (code: string): number => {
   return 20 / Math.pow(20, length - 1)
 }
 
-const decode = (code: string): Area => {
+const decode = (code: string): Area | null => {
   if (!isValid(code)) return null
   const res = resolution(code)
   const [lat, lon] = R.compose(

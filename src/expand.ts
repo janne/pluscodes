@@ -16,7 +16,7 @@ const adjust = (axis: number, refAxis: number, resolution: number): number => {
   return axis
 }
 
-const expand = (shortCode: string, ref: Coord): string => {
+const expand = (shortCode: string, ref: Coord): string | null => {
   if (!shortCode || !ref) return null
   if (!isValid(shortCode)) return null
 

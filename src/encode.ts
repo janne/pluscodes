@@ -38,7 +38,7 @@ const normalizeLongitude = R.compose(
   R.add(180)
 )
 
-const encode = (coord: Coord, length: number = 10): string => {
+const encode = (coord: Coord, length: number = 10): string | null => {
   if (length < 2 || length > 10 || length % 2 !== 0) return null
   if (!isValid(coord)) return null
   return interleave(length)(
