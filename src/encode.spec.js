@@ -1,7 +1,7 @@
 const { encode } = require('.')
 
-const latitude = '59.332438'
-const longitude = '18.118813'
+const latitude = 59.332438
+const longitude = 18.118813
 
 it('should return null if the input is undefined', () => {
   expect(encode()).toEqual(null)
@@ -21,13 +21,19 @@ it('calculates the correct pluscode', () => {
   expect(encode({ latitude, longitude })).toEqual('9FFW84J9+XG')
 })
 
+it('handles coord as strings', () => {
+  expect(encode({ latitude: String(latitude), longitude: String(longitude) })).toEqual(
+    '9FFW84J9+XG'
+  )
+})
+
 it('wraps on longitude above 180°', () => {
   expect(encode({ latitude, longitude: longitude + 360 })).toEqual('9FFW84J9+XG')
 })
 
 it('clamps latitudes below -90', () => {
-  expect(encode({ latitude: '-90.0', longitude })).toEqual('2F2W2429+2G')
-  expect(encode({ latitude: '-90.1', longitude })).toEqual('2F2W2429+2G')
+  expect(encode({ latitude: -90.0, longitude })).toEqual('2F2W2429+2G')
+  expect(encode({ latitude: -90.1, longitude })).toEqual('2F2W2429+2G')
 })
 
 it('has length 11 by default', () => {

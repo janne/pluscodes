@@ -42,7 +42,7 @@ const decode = code => {
     mapIndexed((digit, idx) => [digit, idx]),
     R.reject(R.equals('+'))
   )(code)
-  const coords = R.map(axis => axis.toFixed(6), {
+  const coords = R.map(axis => parseFloat(axis.toFixed(6)), {
     latitude: lat - 90,
     longitude: lon - 180
   })
