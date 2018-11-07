@@ -1,52 +1,44 @@
-const R = require('ramda')
 const { digits } = require('./constants')
 
 const regexp = `^[${digits}0]{8}[+]([${digits}]{2})?$`
-
 const matchesDigits = str => Boolean(String(str).match(regexp))
-
-const isValid = R.allPass([matchesDigits, R.is(String)])
-
-const mapIndexed = R.addIndex(R.map)
+const isString = subject => typeof subject === 'string'
+const isValid = subject => [matchesDigits, isString].every(f => f(subject))
 
 const axisReducer = ({ result, posValue }, value) => ({
   result: result + posValue * (value === -1 ? 0 : value),
   posValue: posValue / 20
 })
 
-const digitsToValues = R.map(R.indexOf(R.__, digits))
+const digitsToValues = xs => xs.map(x => digits.indexOf(x))
 
-const decodeAxis = R.compose(
-  R.reduce(axisReducer, { result: 0, posValue: 20 }),
-  digitsToValues
-)
+const decodeAxis = axis =>
+  digitsToValues(axis).reduce(axisReducer, { result: 0, posValue: 20 }).result
 
 const resolution = code => {
-  const length =
-    R.compose(
-      R.reject(R.equals('+')),
-      R.reject(R.equals('0'))
-    )(code).length / 2
+  const length = code.replace(/[+0]/g, '').length / 2
   return 20 / Math.pow(20, length - 1)
 }
 
 const decode = code => {
   if (!isValid(code)) return null
   const res = resolution(code)
-  const [lat, lon] = R.compose(
-    R.map(R.add(res / 2)),
-    R.map(R.prop('result')),
-    R.map(decodeAxis),
-    R.map(R.map(R.head)),
-    R.partition(([digit, idx]) => idx % 2 === 0),
-    mapIndexed((digit, idx) => [digit, idx]),
-    R.reject(R.equals('+'))
-  )(code)
-  const coords = R.map(axis => parseFloat(axis.toFixed(6)), {
-    latitude: lat - 90,
-    longitude: lon - 180
-  })
-  return R.assoc('resolution', res, coords)
+  const [lat, lon] = code
+    .replace(/[+]/g, '')
+    .split('')
+    .reduce(
+      (arrs, digit, idx) =>
+        idx % 2 === 0 ? [arrs[0].concat(digit), arrs[1]] : [arrs[0], arrs[1].concat(digit)],
+      [[], []]
+    )
+    .map(decodeAxis)
+    .map(axis => axis + res / 2)
+
+  return {
+    latitude: parseFloat((lat - 90).toFixed(6)),
+    longitude: parseFloat((lon - 180).toFixed(6)),
+    resolution: res
+  }
 }
 
 module.exports = decode
