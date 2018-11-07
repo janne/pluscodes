@@ -6,7 +6,10 @@ const pair = `[${digits}]{2}`
 const regexp = `^${pair}(${pair})?(${pair})?(${pair})?[+]${pair}$`
 const matchesDigits = str => Boolean(String(str).match(regexp))
 const isString = subject => typeof subject === 'string'
-const isValid = subject => [isString, matchesDigits].every(f => f(subject))
+const isObject = subject => typeof subject === 'object'
+const isValidCode = subject => [isString, matchesDigits].every(f => f(subject))
+const has = key => obj => key in obj
+const isValidRef = subject => [isObject, has('longitude'), has('latitude')].every(f => f(subject))
 
 const adjust = (...args) => {
   const [axis, refAxis, resolution] = args.map(parseFloat)
@@ -16,7 +19,8 @@ const adjust = (...args) => {
 }
 
 const expand = (shortCode, ref) => {
-  if (!isValid(shortCode)) return null
+  if (!isValidCode(shortCode)) return null
+  if (!isValidRef(ref)) return null
 
   const prefixLength = 11 - shortCode.length
   if (prefixLength === 0) return shortCode

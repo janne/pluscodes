@@ -10,6 +10,10 @@ it('returns null for invalid codes', () => {
   expect(expand('xyz', coords)).toEqual(null)
 })
 
+it('returns null for invalid reference', () => {
+  expect(expand(code, {})).toEqual(null)
+})
+
 it('returns the code for full codes', () => {
   expect(expand(code, coords)).toEqual(code)
 })
