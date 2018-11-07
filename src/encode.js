@@ -1,9 +1,9 @@
-const R = require('ramda')
 const { digits } = require('./constants')
 
-const isValid = R.allPass([R.is(Object), R.has('longitude'), R.has('latitude')])
-
-const parse = value => (R.is(String, value) ? parseFloat(value) : value)
+const isObject = subject => typeof subject === 'object'
+const has = key => obj => key in obj
+const isValid = subject => [isObject, has('longitude'), has('latitude')].every(f => f(subject))
+const parse = value => (typeof value === 'string' ? parseFloat(value) : value)
 
 const digitReducer = ({ value, result, posValue }) => {
   const q = Math.floor(value / posValue)
@@ -15,38 +15,31 @@ const digitReducer = ({ value, result, posValue }) => {
 }
 
 const encodeAxis = (length, value) =>
-  R.compose(
-    R.prop('result'),
-    R.reduce(digitReducer, { value, posValue: 20, result: [] })
-  )(R.repeat(undefined, length))
+  Array(length)
+    .fill()
+    .reduce(digitReducer, { value, posValue: 20, result: [] }).result
 
-const interleave = length =>
-  R.compose(
-    R.join(''),
-    R.insert(8, '+'),
-    R.flatten,
-    R.append(length > 8 ? [] : R.repeat('0', 8 - length)),
-    R.zip
+const interleave = length => (xs, ys) => {
+  const digits = [].concat.apply(
+    [],
+    xs.map((x, i) => [x, ys[i]]).concat(length > 8 ? [] : Array(8 - length).fill('0'))
   )
+  return digits
+    .slice(0, 8)
+    .concat('+')
+    .concat(digits.slice(8))
+    .join('')
+}
 
-const normalizeLatitude = R.compose(
-  R.clamp(0, 180),
-  R.add(90)
-)
-
-const normalizeLongitude = R.compose(
-  R.modulo(R.__, 360),
-  R.add(180)
-)
+const normalizeLatitude = lat => Math.min(180, Math.max(0, lat + 90))
+const normalizeLongitude = lon => (lon + 180) % 360
 
 const encode = (coordinates, length = 10) => {
   if (length < 2 || length > 10 || length % 2 !== 0) return null
   if (!isValid(coordinates)) return null
-  const { longitude, latitude } = R.map(parse, coordinates)
-  return interleave(length)(
-    encodeAxis(length / 2, normalizeLatitude(latitude)),
-    encodeAxis(length / 2, normalizeLongitude(longitude))
-  )
+  const latitude = normalizeLatitude(parse(coordinates.latitude))
+  const longitude = normalizeLongitude(parse(coordinates.longitude))
+  return interleave(length)(encodeAxis(length / 2, latitude), encodeAxis(length / 2, longitude))
 }
 
 module.exports = encode
