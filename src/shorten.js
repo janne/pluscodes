@@ -1,4 +1,3 @@
-const R = require('ramda')
 const expand = require('./expand')
 const decode = require('./decode')
 
@@ -7,6 +6,6 @@ const shortenReducer = (fullCode, ref) => (code, length) => {
   return expand(shortCode, ref) === fullCode ? shortCode : code
 }
 
-const shorten = (code, ref) => R.reduce(shortenReducer(code, ref), null, [10, 8, 6, 4])
+const shorten = (code, ref) => [10, 8, 6, 4].reduce(shortenReducer(code, ref), null)
 
 module.exports = shorten
