@@ -7,8 +7,8 @@ it('returns null on invalid code', () => {
   expect(shorten('invalid', ref)).toEqual(null)
 })
 
-it('returns full code on invalid reference', () => {
-  expect(shorten(code, {})).toEqual(code)
+it('returns null on invalid reference', () => {
+  expect(shorten(code, {})).toEqual(null)
 })
 
 it('returns shortest code if reference is same as code', () => {
