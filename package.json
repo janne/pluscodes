@@ -5,7 +5,8 @@
   "main": "src/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "tsc -d && jest dist",
+    "test": "jest",
+    "pretest": "tsc -d",
     "prepublishOnly": "tsc -d"
   },
   "repository": {
