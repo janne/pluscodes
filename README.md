@@ -1,6 +1,6 @@
 ## Overview
 
-Implementation of [plus codes](https://plus.codes) in Javascript. See a description with running code at [Runkit](https://runkit.com/janne/5bcba8213b24aa0012bc615b).
+Implementation of [plus codes](https://plus.codes) in Javascript/Typescript. See a description with running code at [Runkit](https://runkit.com/janne/5bcba8213b24aa0012bc615b).
 
 ## Usage
 
