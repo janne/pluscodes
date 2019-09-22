@@ -1,10 +1,10 @@
-const { encode } = require('.')
+import encode from './encode'
 
 const latitude = 59.332438
 const longitude = 18.118813
 
 it('should return null if the input is undefined', () => {
-  expect(encode()).toEqual(null)
+  expect(encode(undefined)).toEqual(null)
 })
 
 it('should return null if the input is not an object', () => {
