@@ -2,7 +2,7 @@
   "name": "pluscodes",
   "version": "2.3.0",
   "description": "Library to encode and decode plus codes",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
