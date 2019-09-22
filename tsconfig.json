@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "target": "es5",
-    "module": "umd",
     "declaration": false,
+    "target": "es6",
+    "module": "umd",
     "sourceMap": true,
     "outDir": "./dist"
   }
