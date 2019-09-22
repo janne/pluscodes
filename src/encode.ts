@@ -1,4 +1,4 @@
-import { isValidCoordinates, valueToDigit, parseNum, Coordinates } from './utils'
+import { isValidCoordinates, valueToDigit, parseNum, Coordinates, arrayOf } from './utils'
 
 type Accumulator = {
   value: number
@@ -16,14 +16,12 @@ const digitReducer = ({ value, result, posValue }: Accumulator) => {
 }
 
 const encodeAxis = (length: number, value: number): string[] =>
-  Array(length)
-    .fill(undefined)
-    .reduce(digitReducer, { value, posValue: 20, result: [] }).result
+  arrayOf(length).reduce(digitReducer, { value, posValue: 20, result: [] }).result
 
 const interleave = (length: number) => (xs: string[], ys: string[]): string => {
   const digits = [].concat.apply(
     [],
-    xs.map((x, i) => [x, ys[i]]).concat(length > 8 ? [] : Array(8 - length).fill('0'))
+    xs.map((x, i) => [x, ys[i]]).concat(length > 8 ? [] : arrayOf(8 - length, '0'))
   )
   return digits
     .slice(0, 8)
