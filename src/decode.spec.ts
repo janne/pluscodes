@@ -1,7 +1,7 @@
-const decode = require('./decode')
+import decode from './decode'
 
 it('returns null for non-string input', () => {
-  expect(decode()).toEqual(null)
+  expect(decode(undefined)).toEqual(null)
   expect(decode(42)).toEqual(null)
   expect(decode({})).toEqual(null)
 })

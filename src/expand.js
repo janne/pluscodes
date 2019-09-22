@@ -1,5 +1,5 @@
 const encode = require('./encode').default
-const decode = require('./decode')
+const decode = require('./decode').default
 const { digits } = require('./constants')
 
 const pair = `[${digits}]{2}`
