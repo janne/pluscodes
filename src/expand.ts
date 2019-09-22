@@ -1,16 +1,9 @@
-import encode, { Coordinates } from './encode'
+import encode from './encode'
 import decode from './decode'
-import { digits } from './constants'
-
-const pair = `[${digits}]{2}`
-const regexp = `^${pair}(${pair})?(${pair})?(${pair})?[+]${pair}$`
-const matchesDigits = (str: string) => Boolean(str.match(regexp))
-const isValidCode = (subject: unknown) => typeof subject === 'string' && matchesDigits(subject)
-const isValidRef = (subject: unknown): subject is Coordinates =>
-  typeof subject === 'object' && 'longitude' in subject && 'latitude' in subject
+import { isValidCoordinates, isValidCode, parseNum, Coordinates } from './utils'
 
 const adjust = (axis: number, refAxis: string | number, resolution: number) => {
-  const refFloat = typeof refAxis === 'string' ? parseFloat(refAxis) : refAxis
+  const refFloat = parseNum(refAxis)
   if (axis > refFloat + resolution / 2) return axis - resolution
   if (axis < refFloat - resolution / 2) return axis + resolution
   return axis
@@ -18,7 +11,7 @@ const adjust = (axis: number, refAxis: string | number, resolution: number) => {
 
 const expand = (shortCode: string, ref: Coordinates) => {
   if (!isValidCode(shortCode)) return null
-  if (!isValidRef(ref)) return null
+  if (!isValidCoordinates(ref)) return null
 
   const prefixLength = 11 - shortCode.length
   if (prefixLength === 0) return shortCode

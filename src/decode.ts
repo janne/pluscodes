@@ -1,15 +1,9 @@
-import { digits } from './constants'
-
-const regexp = `^[${digits}0]{8}[+]([${digits}]{2})?$`
-const matchesDigits = (str: string) => Boolean(str.match(regexp))
-const isValid = (subject: unknown) => typeof subject === 'string' && matchesDigits(subject)
+import { isValidCode, digitsToValues } from './utils'
 
 const axisReducer = ({ result, posValue }, value) => ({
   result: result + posValue * (value === -1 ? 0 : value),
   posValue: posValue / 20
 })
-
-const digitsToValues = (xs: string[]) => xs.map(x => digits.indexOf(x))
 
 const decodeAxis = (axis: string[]): number =>
   digitsToValues(axis).reduce(axisReducer, { result: 0, posValue: 20 }).result
@@ -20,7 +14,7 @@ const resolution = (code: string) => {
 }
 
 const decode = (code: string) => {
-  if (!isValid(code)) return null
+  if (!isValidCode(code)) return null
   const res = resolution(code)
   const [lat, lon] = code
     .replace(/[+]/g, '')
