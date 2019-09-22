@@ -13,7 +13,7 @@ type DigitAccumulator = {
 
 const isObject = (subject: unknown): subject is object => typeof subject === 'object'
 const has = (key: string, obj: object) => key in obj
-const isValid = (subject: unknown): subject is Coordinates =>
+const isValid = (subject: unknown) =>
   isObject(subject) && has('longitude', subject) && has('latitude', subject)
 
 const parse = (value: number | string) => (typeof value === 'string' ? parseFloat(value) : value)
@@ -47,7 +47,7 @@ const interleave = (length: number) => (xs: string[], ys: string[]): string => {
 const normalizeLatitude = (lat: number) => Math.min(180, Math.max(0, lat + 90))
 const normalizeLongitude = (lon: number) => (lon + 180) % 360
 
-const encode = (coordinates: unknown, length = 10): string => {
+const encode = (coordinates: Coordinates, length = 10): string => {
   if (length < 2 || length > 10 || length % 2 !== 0) return null
   if (!isValid(coordinates)) return null
   const latitude = normalizeLatitude(parse(coordinates.latitude))

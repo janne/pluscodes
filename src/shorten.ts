@@ -1,13 +1,14 @@
 import expand from './expand'
+import { Coordinates } from './encode'
 
-const isValid = (subject: unknown): subject is string => typeof subject === 'string'
+const isValid = (subject: unknown) => typeof subject === 'string'
 
-const shortenReducer = (fullCode: string, ref: unknown) => (code: string, length: number) => {
+const shortenReducer = (fullCode: string, ref: Coordinates) => (code: string, length: number) => {
   const shortCode = fullCode.slice(10 - length)
   return expand(shortCode, ref) === fullCode ? shortCode : code
 }
 
-const shorten = (code: unknown, ref: unknown) => {
+const shorten = (code: string, ref: Coordinates) => {
   if (!isValid(code)) return null
   return [10, 8, 6, 4].reduce(shortenReducer(code, ref), null)
 }

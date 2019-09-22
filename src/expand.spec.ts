@@ -11,7 +11,7 @@ it('returns null for invalid codes', () => {
 })
 
 it('returns null for invalid reference', () => {
-  expect(expand(code, {})).toEqual(null)
+  expect(expand(code, {} as any)).toEqual(null)
 })
 
 it('returns the code for full codes', () => {

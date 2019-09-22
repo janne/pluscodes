@@ -2,8 +2,7 @@ import { digits } from './constants'
 
 const regexp = `^[${digits}0]{8}[+]([${digits}]{2})?$`
 const matchesDigits = (str: string) => Boolean(str.match(regexp))
-const isValid = (subject: unknown): subject is string =>
-  typeof subject === 'string' && matchesDigits(subject)
+const isValid = (subject: unknown) => typeof subject === 'string' && matchesDigits(subject)
 
 const axisReducer = ({ result, posValue }, value) => ({
   result: result + posValue * (value === -1 ? 0 : value),
@@ -20,7 +19,7 @@ const resolution = (code: string) => {
   return 20 / Math.pow(20, length - 1)
 }
 
-const decode = (code: unknown) => {
+const decode = (code: string) => {
   if (!isValid(code)) return null
   const res = resolution(code)
   const [lat, lon] = code
