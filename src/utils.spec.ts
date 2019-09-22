@@ -1,4 +1,11 @@
-import { isValidCoordinates, isValidCode, digitToValue, valueToDigit, parseNum } from './utils'
+import {
+  isValidCoordinates,
+  isValidCode,
+  digitToValue,
+  valueToDigit,
+  parseNum,
+  arrayOf
+} from './utils'
 
 describe('isValidCoordinates', () => {
   it('should return null if the input is undefined', () => {
@@ -70,5 +77,17 @@ describe('parseNum', () => {
   })
   it('parses strings', () => {
     expect(parseNum('3.14')).toBe(3.14)
+  })
+})
+
+describe('arrayOf', () => {
+  it('returns an array of n undefined elements', () => {
+    expect(arrayOf(5)).toEqual([undefined, undefined, undefined, undefined, undefined])
+    expect(arrayOf(0)).toEqual([])
+  })
+
+  it('returns an array of n defined elements', () => {
+    expect(arrayOf(3, 42)).toEqual([42, 42, 42])
+    expect(arrayOf(3, '0')).toEqual(['0', '0', '0'])
   })
 })

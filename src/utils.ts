@@ -20,3 +20,9 @@ export const valueToDigit = (x: number) => digits.charAt(x)
 
 export const parseNum = (value: number | string): number =>
   typeof value === 'string' ? parseFloat(value) : value
+
+export const arrayOf = <T>(count: number, fill?: T) => {
+  const result = []
+  for (let i = 0; i < count; i++) result.push(fill)
+  return result
+}
