@@ -1,5 +1,4 @@
-const expand = require('./expand')
-const decode = require('./decode')
+const expand = require('./expand').default
 
 const shortenReducer = (fullCode, ref) => (code, length) => {
   const shortCode = fullCode.slice(10 - length)

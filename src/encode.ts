@@ -1,6 +1,6 @@
 import { digits } from './constants'
 
-type Coordinates = {
+export type Coordinates = {
   latitude: number | string
   longitude: number | string
 }
