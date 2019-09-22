@@ -1,5 +1,5 @@
 import expand from './expand'
-import { Coordinates } from './encode'
+import { Coordinates } from './utils'
 
 const isValid = (subject: unknown) => typeof subject === 'string'
 

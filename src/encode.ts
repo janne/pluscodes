@@ -1,9 +1,4 @@
-import { digits } from './constants'
-
-export type Coordinates = {
-  latitude: number | string
-  longitude: number | string
-}
+import { isValidCoordinates, valueToDigit, parseNum, Coordinates } from './utils'
 
 type DigitAccumulator = {
   value: number
@@ -11,19 +6,12 @@ type DigitAccumulator = {
   result: string[]
 }
 
-const isObject = (subject: unknown): subject is object => typeof subject === 'object'
-const has = (key: string, obj: object) => key in obj
-const isValid = (subject: unknown) =>
-  isObject(subject) && has('longitude', subject) && has('latitude', subject)
-
-const parse = (value: number | string) => (typeof value === 'string' ? parseFloat(value) : value)
-
 const digitReducer = ({ value, result, posValue }: DigitAccumulator) => {
   const q = Math.floor(value / posValue)
   return {
     value: value - q * posValue,
     posValue: posValue / 20,
-    result: [...result, digits.charAt(q)]
+    result: [...result, valueToDigit(q)]
   }
 }
 
@@ -49,9 +37,9 @@ const normalizeLongitude = (lon: number) => (lon + 180) % 360
 
 const encode = (coordinates: Coordinates, length = 10): string => {
   if (length < 2 || length > 10 || length % 2 !== 0) return null
-  if (!isValid(coordinates)) return null
-  const latitude = normalizeLatitude(parse(coordinates.latitude))
-  const longitude = normalizeLongitude(parse(coordinates.longitude))
+  if (!isValidCoordinates(coordinates)) return null
+  const latitude = normalizeLatitude(parseNum(coordinates.latitude))
+  const longitude = normalizeLongitude(parseNum(coordinates.longitude))
   return interleave(length)(encodeAxis(length / 2, latitude), encodeAxis(length / 2, longitude))
 }
 
