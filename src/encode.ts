@@ -1,12 +1,12 @@
 import { isValidCoordinates, valueToDigit, parseNum, Coordinates } from './utils'
 
-type DigitAccumulator = {
+type Accumulator = {
   value: number
   posValue: number
   result: string[]
 }
 
-const digitReducer = ({ value, result, posValue }: DigitAccumulator) => {
+const digitReducer = ({ value, result, posValue }: Accumulator) => {
   const q = Math.floor(value / posValue)
   return {
     value: value - q * posValue,

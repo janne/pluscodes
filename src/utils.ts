@@ -14,7 +14,7 @@ export const isValidCoordinates = (coordinates: unknown): coordinates is Coordin
 export const isValidCode = (subject: unknown): subject is string =>
   typeof subject === 'string' && Boolean(subject.match(regexp))
 
-export const digitsToValues = (xs: string[]) => xs.map(x => digits.indexOf(x))
+export const digitToValue = (x: string) => digits.indexOf(x)
 
 export const valueToDigit = (x: number) => digits.charAt(x)
 
