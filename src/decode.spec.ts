@@ -2,8 +2,8 @@ import decode from './decode'
 
 it('returns null for non-string input', () => {
   expect(decode(undefined)).toEqual(null)
-  expect(decode(42)).toEqual(null)
-  expect(decode({})).toEqual(null)
+  expect(decode(42 as any)).toEqual(null)
+  expect(decode({} as any)).toEqual(null)
 })
 
 it('returns null for invalid length', () => {

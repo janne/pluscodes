@@ -8,13 +8,13 @@ it('should return null if the input is undefined', () => {
 })
 
 it('should return null if the input is not an object', () => {
-  expect(encode('foo')).toEqual(null)
+  expect(encode('foo' as any)).toEqual(null)
 })
 
 it("should return null if the input doesn't contain longitude and latitude", () => {
-  expect(encode({})).toEqual(null)
-  expect(encode({ longitude: '' })).toEqual(null)
-  expect(encode({ latitude: '' })).toEqual(null)
+  expect(encode({} as any)).toEqual(null)
+  expect(encode({ longitude: '' } as any)).toEqual(null)
+  expect(encode({ latitude: '' } as any)).toEqual(null)
 })
 
 it('calculates the correct pluscode', () => {

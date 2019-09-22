@@ -5,8 +5,8 @@ const code = '9FFW84J9+XG'
 
 it('returns null for non-string input', () => {
   expect(shorten(undefined, ref)).toEqual(null)
-  expect(shorten(42, ref)).toEqual(null)
-  expect(shorten({}, ref)).toEqual(null)
+  expect(shorten(42 as any, ref)).toEqual(null)
+  expect(shorten({} as any, ref)).toEqual(null)
 })
 
 it('returns null on invalid code', () => {
@@ -14,7 +14,7 @@ it('returns null on invalid code', () => {
 })
 
 it('returns null on invalid reference', () => {
-  expect(shorten(code, {})).toEqual(null)
+  expect(shorten(code, {} as any)).toEqual(null)
 })
 
 it('returns shortest code if reference is same as code', () => {

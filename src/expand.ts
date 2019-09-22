@@ -5,8 +5,7 @@ import { digits } from './constants'
 const pair = `[${digits}]{2}`
 const regexp = `^${pair}(${pair})?(${pair})?(${pair})?[+]${pair}$`
 const matchesDigits = (str: string) => Boolean(str.match(regexp))
-const isValidCode = (subject: unknown): subject is string =>
-  typeof subject === 'string' && matchesDigits(subject)
+const isValidCode = (subject: unknown) => typeof subject === 'string' && matchesDigits(subject)
 const isValidRef = (subject: unknown): subject is Coordinates =>
   typeof subject === 'object' && 'longitude' in subject && 'latitude' in subject
 
@@ -17,7 +16,7 @@ const adjust = (axis: number, refAxis: string | number, resolution: number) => {
   return axis
 }
 
-const expand = (shortCode: unknown, ref: unknown) => {
+const expand = (shortCode: string, ref: Coordinates) => {
   if (!isValidCode(shortCode)) return null
   if (!isValidRef(ref)) return null
 
