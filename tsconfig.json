@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "declaration": false,
+    "declaration": true,
     "target": "es6",
     "module": "umd",
     "sourceMap": true,
