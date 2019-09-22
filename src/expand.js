@@ -1,4 +1,4 @@
-const encode = require('./encode')
+const encode = require('./encode').default
 const decode = require('./decode')
 const { digits } = require('./constants')
 
