@@ -1,12 +1,17 @@
-import { isValidCode, digitsToValues } from './utils'
+import { isValidCode, digitToValue } from './utils'
 
-const axisReducer = ({ result, posValue }, value) => ({
+type Accumulator = {
+  posValue: number
+  result: number
+}
+
+const axisReducer = ({ result, posValue }: Accumulator, value: number) => ({
   result: result + posValue * (value === -1 ? 0 : value),
   posValue: posValue / 20
 })
 
 const decodeAxis = (axis: string[]): number =>
-  digitsToValues(axis).reduce(axisReducer, { result: 0, posValue: 20 }).result
+  axis.map(digitToValue).reduce(axisReducer, { result: 0, posValue: 20 }).result
 
 const resolution = (code: string) => {
   const length = code.replace(/[+0]/g, '').length / 2
