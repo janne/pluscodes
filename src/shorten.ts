@@ -3,7 +3,10 @@ import { Coordinates } from './utils'
 
 const isValid = (subject: unknown) => typeof subject === 'string'
 
-const shortenReducer = (fullCode: string, ref: Coordinates) => (code: string, length: number) => {
+const shortenReducer = (fullCode: string, ref: Coordinates) => (
+  code: string | null,
+  length: number
+) => {
   const shortCode = fullCode.slice(10 - length)
   return expand(shortCode, ref) === fullCode ? shortCode : code
 }

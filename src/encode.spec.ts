@@ -4,7 +4,7 @@ const latitude = 59.332438
 const longitude = 18.118813
 
 it('should return null if the input is undefined', () => {
-  expect(encode(undefined)).toEqual(null)
+  expect(encode(undefined as any)).toEqual(null)
 })
 
 it('should return null if the input is not an object', () => {
@@ -37,12 +37,12 @@ it('clamps latitudes below -90', () => {
 })
 
 it('has length 11 by default', () => {
-  expect(encode({ latitude, longitude }).length).toEqual(11)
+  expect(encode({ latitude, longitude })!.length).toEqual(11)
 })
 
 it('it supports sending length and adds 1 (the plus)', () => {
-  expect(encode({ latitude, longitude }, 10).length).toEqual(11)
-  expect(encode({ latitude, longitude }, 8).length).toEqual(9)
+  expect(encode({ latitude, longitude }, 10)!.length).toEqual(11)
+  expect(encode({ latitude, longitude }, 8)!.length).toEqual(9)
 })
 
 it('adds zero padding on lengths below 8', () => {

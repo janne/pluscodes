@@ -4,7 +4,7 @@ const ref = { latitude: 59.329394, longitude: 18.068712 }
 const code = '9FFW84J9+XG'
 
 it('returns null for non-string input', () => {
-  expect(shorten(undefined, ref)).toEqual(null)
+  expect(shorten(undefined as any, ref)).toEqual(null)
   expect(shorten(42 as any, ref)).toEqual(null)
   expect(shorten({} as any, ref)).toEqual(null)
 })
