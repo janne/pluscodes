@@ -25,12 +25,12 @@ const decode = (code: string) => {
     .replace(/[+]/g, '')
     .split('')
     .reduce(
-      (arrs, digit, idx) =>
-        idx % 2 === 0 ? [arrs[0].concat(digit), arrs[1]] : [arrs[0], arrs[1].concat(digit)],
+      (arrs: string[][], digit: string, idx: number) =>
+        idx % 2 === 0 ? [[...arrs[0], digit], arrs[1]] : [arrs[0], [...arrs[1], digit]],
       [[], []]
     )
     .map(decodeAxis)
-    .map(axis => axis + res / 2)
+    .map((axis: number) => axis + res / 2)
 
   return {
     latitude: parseFloat((lat - 90).toFixed(6)),

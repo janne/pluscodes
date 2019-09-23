@@ -1,7 +1,7 @@
 import decode from './decode'
 
 it('returns null for non-string input', () => {
-  expect(decode(undefined)).toEqual(null)
+  expect(decode(undefined as any)).toEqual(null)
   expect(decode(42 as any)).toEqual(null)
   expect(decode({} as any)).toEqual(null)
 })

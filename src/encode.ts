@@ -1,4 +1,12 @@
-import { isValidCoordinates, valueToDigit, parseNum, Coordinates, arrayOf } from './utils'
+import {
+  isValidCoordinates,
+  valueToDigit,
+  parseNum,
+  Coordinates,
+  arrayOf,
+  zip,
+  flatten
+} from './utils'
 
 type Accumulator = {
   value: number
@@ -16,24 +24,20 @@ const digitReducer = ({ value, result, posValue }: Accumulator) => {
 }
 
 const encodeAxis = (length: number, value: number): string[] =>
-  arrayOf(length).reduce(digitReducer, { value, posValue: 20, result: [] }).result
+  arrayOf(length, null).reduce(digitReducer, { value, posValue: 20, result: [] }).result
 
 const interleave = (length: number) => (xs: string[], ys: string[]): string => {
-  const digits = [].concat.apply(
-    [],
-    xs.map((x, i) => [x, ys[i]]).concat(length > 8 ? [] : arrayOf(8 - length, '0'))
-  )
-  return digits
-    .slice(0, 8)
-    .concat('+')
-    .concat(digits.slice(8))
-    .join('')
+  const zipped = zip(xs, ys)
+  const padding = length > 8 ? [] : arrayOf(8 - length, '0')
+  const digits = [...flatten(zipped), ...padding]
+
+  return [...digits.slice(0, 8), '+', ...digits.slice(8)].join('')
 }
 
 const normalizeLatitude = (lat: number) => Math.min(180, Math.max(0, lat + 90))
 const normalizeLongitude = (lon: number) => (lon + 180) % 360
 
-const encode = (coordinates: Coordinates, length = 10): string => {
+const encode = (coordinates: Coordinates, length = 10) => {
   if (length < 2 || length > 10 || length % 2 !== 0) return null
   if (!isValidCoordinates(coordinates)) return null
   const latitude = normalizeLatitude(parseNum(coordinates.latitude))

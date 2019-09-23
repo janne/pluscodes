@@ -4,7 +4,9 @@ import {
   digitToValue,
   valueToDigit,
   parseNum,
-  arrayOf
+  arrayOf,
+  zip,
+  flatten
 } from './utils'
 
 describe('isValidCoordinates', () => {
@@ -81,13 +83,37 @@ describe('parseNum', () => {
 })
 
 describe('arrayOf', () => {
-  it('returns an array of n undefined elements', () => {
-    expect(arrayOf(5)).toEqual([undefined, undefined, undefined, undefined, undefined])
-    expect(arrayOf(0)).toEqual([])
+  it('returns an array of n null elements', () => {
+    expect(arrayOf(5, null)).toEqual([null, null, null, null, null])
+    expect(arrayOf(0, null)).toEqual([])
   })
 
   it('returns an array of n defined elements', () => {
     expect(arrayOf(3, 42)).toEqual([42, 42, 42])
     expect(arrayOf(3, '0')).toEqual(['0', '0', '0'])
+  })
+})
+
+describe('zip', () => {
+  it('zips two arrays', () => {
+    expect(zip([1, 2, 3], [10, 20, 30])).toEqual([[1, 10], [2, 20], [3, 30]])
+  })
+
+  it('zips two arrays of different types', () => {
+    expect(zip([1, 2, 3], ['a', 'b', 'c'])).toEqual([[1, 'a'], [2, 'b'], [3, 'c']])
+  })
+})
+
+describe('flatten', () => {
+  it('flattens arrays of arrays', () => {
+    expect(flatten([[1, 2, 3], [4, 5, 6]])).toEqual([1, 2, 3, 4, 5, 6])
+  })
+
+  it('does nothing with already flat array', () => {
+    expect(flatten([1, 2, 3])).toEqual([1, 2, 3])
+  })
+
+  it('flattens arrays in mixed array', () => {
+    expect(flatten([[1, 2, 3], 4, [5, 6]])).toEqual([1, 2, 3, 4, 5, 6])
   })
 })

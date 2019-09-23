@@ -5,8 +5,8 @@ const coords = { latitude: 59.33125, longitude: 18.11875 }
 const code = '9FFW84J9+XG'
 
 it('returns null for invalid codes', () => {
-  expect(expand(undefined, coords)).toEqual(null)
-  expect(expand(null, coords)).toEqual(null)
+  expect(expand(undefined as any, coords)).toEqual(null)
+  expect(expand(null as any, coords)).toEqual(null)
   expect(expand('xyz', coords)).toEqual(null)
 })
 
