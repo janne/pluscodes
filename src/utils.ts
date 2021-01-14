@@ -8,7 +8,7 @@ const pair = `[${digits}]{2}`
 const pairOrZero = `([${digits}]|0){2}`
 const regexp = `^${pair}(${pairOrZero}){0,3}[+](${pair})?$`
 
-export const isValidCoordinates = (subject: unknown): subject is Coordinates => {
+export const isValidCoordinates = (subject: object): subject is Coordinates => {
   if (subject == null || typeof subject !== 'object') return false
   return 'longitude' in subject! && 'latitude' in subject!
 }
