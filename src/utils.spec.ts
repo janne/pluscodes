@@ -11,7 +11,7 @@ import {
 
 describe('isValidCoordinates', () => {
   it('should return null if the input is undefined', () => {
-    expect(isValidCoordinates(undefined)).toBe(false)
+    expect(isValidCoordinates(undefined as any)).toBe(false)
   })
 
   it('should return false if the input is not an object', () => {
