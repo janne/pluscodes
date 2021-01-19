@@ -25,11 +25,12 @@
   },
   "homepage": "https://runkit.com/janne/5bcba8213b24aa0012bc615b",
   "devDependencies": {
-    "eslint": "^5.7.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0",
-    "jest": "^23.6.0",
-    "@types/jest": "^24.0.18",
-    "ts-jest": "^24.1.0"
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "jest": "^26.6.3",
+    "ts-jest": "^26.4.4",
+    "@types/jest": "^26.0.20",
+    "typescript": "^4.1.3"
   }
 }
