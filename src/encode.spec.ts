@@ -17,7 +17,7 @@ it("should return null if the input doesn't contain longitude and latitude", () 
   expect(encode({ latitude: '' } as any)).toEqual(null)
 })
 
-it('calculates the correct pluscode', () => {
+it('calculates length 10 pluscodes default', () => {
   expect(encode({ latitude, longitude })).toEqual('9FFW84J9+XG')
 })
 
@@ -52,11 +52,10 @@ it('adds zero padding on lengths below 8', () => {
   expect(encode({ latitude, longitude }, 2)).toEqual('9F000000+')
 })
 
-it('it only supports lengths above 2 and below 10', () => {
+it('it only supports lengths between 2 and 15', () => {
   expect(encode({ latitude, longitude }, 0)).toEqual(null)
   expect(encode({ latitude, longitude }, 1)).toEqual(null)
-  expect(encode({ latitude, longitude }, 11)).toEqual(null)
-  expect(encode({ latitude, longitude }, 12)).toEqual(null)
+  expect(encode({ latitude, longitude }, 16)).toEqual(null)
 })
 
 it('it only even lengths', () => {

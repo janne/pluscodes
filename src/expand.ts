@@ -28,7 +28,7 @@ const expand = (shortCode: string, ref: Coordinates) => {
 
   return encode({
     latitude: adjust(latitude, ref.latitude, resolution),
-    longitude: adjust(longitude, ref.longitude, resolution)
+    longitude: adjust(longitude, ref.longitude, resolution),
   })
 }
 

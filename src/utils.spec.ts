@@ -6,7 +6,7 @@ import {
   parseNum,
   arrayOf,
   zip,
-  flatten
+  flatten,
 } from './utils'
 
 describe('isValidCoordinates', () => {
@@ -41,7 +41,9 @@ describe('isValidCode', () => {
   it('returns null for invalid length', () => {
     expect(isValidCode('')).toBe(false)
     expect(isValidCode('23')).toBe(false)
+    expect(isValidCode('9FFW84J9+X')).toBe(false)
     expect(isValidCode('23456789CFGH')).toBe(false) // 12
+    expect(isValidCode('9FFW84J9+XG234567')).toBe(false)
   })
 
   it('returns null for invalid digits', () => {
@@ -52,6 +54,11 @@ describe('isValidCode', () => {
 
   it('isValidCodes the plus code', () => {
     expect(isValidCode('9FFW84J9+XG')).toBe(true)
+    expect(isValidCode('9FFW84J9+XG2')).toBe(true)
+    expect(isValidCode('9FFW84J9+XG23')).toBe(true)
+    expect(isValidCode('9FFW84J9+XG234')).toBe(true)
+    expect(isValidCode('9FFW84J9+XG2345')).toBe(true)
+    expect(isValidCode('9FFW84J9+XG23456')).toBe(true)
   })
 })
 
@@ -96,17 +103,30 @@ describe('arrayOf', () => {
 
 describe('zip', () => {
   it('zips two arrays', () => {
-    expect(zip([1, 2, 3], [10, 20, 30])).toEqual([[1, 10], [2, 20], [3, 30]])
+    expect(zip([1, 2, 3], [10, 20, 30])).toEqual([
+      [1, 10],
+      [2, 20],
+      [3, 30],
+    ])
   })
 
   it('zips two arrays of different types', () => {
-    expect(zip([1, 2, 3], ['a', 'b', 'c'])).toEqual([[1, 'a'], [2, 'b'], [3, 'c']])
+    expect(zip([1, 2, 3], ['a', 'b', 'c'])).toEqual([
+      [1, 'a'],
+      [2, 'b'],
+      [3, 'c'],
+    ])
   })
 })
 
 describe('flatten', () => {
   it('flattens arrays of arrays', () => {
-    expect(flatten([[1, 2, 3], [4, 5, 6]])).toEqual([1, 2, 3, 4, 5, 6])
+    expect(
+      flatten([
+        [1, 2, 3],
+        [4, 5, 6],
+      ])
+    ).toEqual([1, 2, 3, 4, 5, 6])
   })
 
   it('does nothing with already flat array', () => {

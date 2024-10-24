@@ -6,7 +6,7 @@ export type Coordinates = {
 const digits = '23456789CFGHJMPQRVWX'
 const pair = `[${digits}]{2}`
 const pairOrZero = `([${digits}]|0){2}`
-const regexp = `^${pair}(${pairOrZero}){0,3}[+](${pair})?$`
+const regexp = `^${pair}(${pairOrZero}){0,3}[+]([${digits}]{2,7})?$`
 
 export const isValidCoordinates = (subject: object): subject is Coordinates => {
   if (subject == null || typeof subject !== 'object') return false
