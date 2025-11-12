@@ -1,13 +1,22 @@
 {
   "name": "pluscodes",
   "version": "3.0.0",
-  "description": "Library to encode and decode plus codes",
+  "description": "Library to encode and decode Open Location Codes (Plus Codes) with support for 2-15 digit precision",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "scripts": {
+    "build": "tsc -d",
     "test": "jest",
-    "pretest": "tsc -d",
-    "prepublishOnly": "tsc -d"
+    "pretest": "npm run build",
+    "prepublishOnly": "npm run build && npm test"
   },
   "repository": {
     "type": "git",
