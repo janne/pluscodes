@@ -1,7 +1,7 @@
 import encode from './encode'
 
-const latitude = 59.332438
-const longitude = 18.118813
+const latitude = 59.332483
+const longitude = 18.118765
 
 it('should return null if the input is undefined', () => {
   expect(encode(undefined as any)).toEqual(null)
@@ -17,8 +17,17 @@ it("should return null if the input doesn't contain longitude and latitude", () 
   expect(encode({ latitude: '' } as any)).toEqual(null)
 })
 
-it('calculates length 10 pluscodes default', () => {
+it('calculates pluscodes of length 10 by default', () => {
   expect(encode({ latitude, longitude })).toEqual('9FFW84J9+XG')
+})
+
+it('support longer pluscodes', () => {
+  expect(encode({ latitude, longitude }, 10)).toEqual('9FFW84J9+XG')
+  expect(encode({ latitude, longitude }, 11)).toEqual('9FFW84J9+XGR')
+  expect(encode({ latitude, longitude }, 12)).toEqual('9FFW84J9+XGR7')
+  expect(encode({ latitude, longitude }, 13)).toEqual('9FFW84J9+XGR7Q')
+  expect(encode({ latitude, longitude }, 14)).toEqual('9FFW84J9+XGR7Q4')
+  expect(encode({ latitude, longitude }, 15)).toEqual('9FFW84J9+XGR7Q44')
 })
 
 it('handles coord as strings', () => {
@@ -58,7 +67,7 @@ it('it only supports lengths between 2 and 15', () => {
   expect(encode({ latitude, longitude }, 16)).toEqual(null)
 })
 
-it('it only even lengths', () => {
+it('it only support even lengths below 10', () => {
   expect(encode({ latitude, longitude }, 3)).toEqual(null)
   expect(encode({ latitude, longitude }, 5)).toEqual(null)
   expect(encode({ latitude, longitude }, 7)).toEqual(null)
