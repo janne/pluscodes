@@ -7,23 +7,17 @@ import {
   zip,
   flatten,
 } from './utils'
-
-// Open Location Code constants
-const ENCODING_BASE = 20
-const PAIR_CODE_LENGTH = 10
-const GRID_ROWS = 5
-const GRID_COLUMNS = 4
-const GRID_CODE_LENGTH = 5
-const LATITUDE_MAX = 90
-const LONGITUDE_MAX = 180
-
-// Precision constants for grid encoding (digits 11-15)
-// PAIR_PRECISION = 20^3 = 8000
-// FINAL_LAT_PRECISION = 8000 * 5^5 = 25,000,000
-// FINAL_LNG_PRECISION = 8000 * 4^5 = 8,192,000
-const PAIR_PRECISION = ENCODING_BASE ** 3
-const FINAL_LAT_PRECISION = PAIR_PRECISION * GRID_ROWS ** GRID_CODE_LENGTH
-const FINAL_LNG_PRECISION = PAIR_PRECISION * GRID_COLUMNS ** GRID_CODE_LENGTH
+import {
+  ENCODING_BASE,
+  PAIR_CODE_LENGTH,
+  GRID_ROWS,
+  GRID_COLUMNS,
+  GRID_CODE_LENGTH,
+  LATITUDE_MAX,
+  LONGITUDE_MAX,
+  FINAL_LAT_PRECISION,
+  FINAL_LNG_PRECISION,
+} from './constants'
 
 type Accumulator = {
   value: number

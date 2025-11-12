@@ -1,12 +1,12 @@
 import { isValidCode, digitToValue } from './utils'
-
-// Open Location Code constants (matching encode.ts)
-const ENCODING_BASE = 20
-const PAIR_CODE_LENGTH = 10
-const GRID_ROWS = 5
-const GRID_COLUMNS = 4
-const LATITUDE_MAX = 90
-const LONGITUDE_MAX = 180
+import {
+  ENCODING_BASE,
+  PAIR_CODE_LENGTH,
+  GRID_ROWS,
+  GRID_COLUMNS,
+  LATITUDE_MAX,
+  LONGITUDE_MAX,
+} from './constants'
 
 type DecodedLocation = {
   latitude: number
@@ -29,7 +29,6 @@ const decodeAxis = (axis: string[]): number =>
   axis.map(digitToValue).reduce(axisReducer, { result: 0, posValue: ENCODING_BASE }).result
 
 const calculatePairResolution = (pairDigits: number): number => {
-  // Resolution = 20 / 20^(pairDigits - 1) = 20^(2 - pairDigits)
   return ENCODING_BASE ** (2 - pairDigits)
 }
 
