@@ -1,6 +1,7 @@
 import encode from './encode'
 import decode from './decode'
 import { isValidCoordinates, isValidCode, parseNum, Coordinates } from './utils'
+import { SEPARATOR_POSITION } from './constants'
 
 const adjust = (axis: number, refAxis: string | number, resolution: number) => {
   const refFloat = parseNum(refAxis)
@@ -13,7 +14,8 @@ const expand = (shortCode: string, ref: Coordinates) => {
   if (!isValidCode(shortCode)) return null
   if (!isValidCoordinates(ref)) return null
 
-  const prefixLength = 11 - shortCode.length
+  // Short codes omit digits from the start, so the separator tells how many are missing
+  const prefixLength = SEPARATOR_POSITION - shortCode.indexOf('+')
   if (prefixLength === 0) return shortCode
 
   const prefixedCode = encode(ref, prefixLength)
@@ -25,11 +27,15 @@ const expand = (shortCode: string, ref: Coordinates) => {
 
   const { latitude, longitude } = coords
   const resolution = Math.pow(20, 2 - prefixLength / 2)
+  const length = code.length - 1
 
-  return encode({
-    latitude: adjust(latitude, ref.latitude, resolution),
-    longitude: adjust(longitude, ref.longitude, resolution),
-  })
+  return encode(
+    {
+      latitude: adjust(latitude, ref.latitude, resolution),
+      longitude: adjust(longitude, ref.longitude, resolution),
+    },
+    length,
+  )
 }
 
 export default expand

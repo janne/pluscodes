@@ -24,3 +24,15 @@ it('expands the codes', () => {
   expect(expand('84J9+XG', refCoords)).toEqual(code)
   expect(expand('J9+XG', refCoords)).toEqual('9FFW83J9+XG') // westward
 })
+
+it('returns the code for full codes with more than 10 digits', () => {
+  expect(expand('9FFW84J9+XGG', coords)).toEqual('9FFW84J9+XGG')
+})
+
+it('expands codes with more than 10 digits', () => {
+  const refCoords = { latitude: 59.329394, longitude: 18.068712 }
+  expect(expand('FW84J9+XGG', refCoords)).toEqual('9FFW84J9+XGG')
+  expect(expand('84J9+XGG', refCoords)).toEqual('9FFW84J9+XGG')
+  expect(expand('J9+XGG', refCoords)).toEqual('9FFW83J9+XGG') // westward
+  expect(expand('84J9+XGGC', refCoords)).toEqual('9FFW84J9+XGGC')
+})
