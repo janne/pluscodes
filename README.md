@@ -57,8 +57,8 @@ decode('9FFW84J9+XG')
 
 decode('9FFW84J9+XGR7Q44')
 // {
-//   latitude: 59.332483,
-//   longitude: 18.118765,
+//   latitude: 59.33248302,
+//   longitude: 18.11876495,
 //   latitudeResolution: 4e-8,
 //   longitudeResolution: 1.2207031e-7
 // }
