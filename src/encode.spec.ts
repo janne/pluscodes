@@ -68,6 +68,12 @@ it('it only supports lengths of 2 and above', () => {
   expect(encode({ latitude, longitude }, 1)).toEqual(null)
 })
 
+it('returns null for lengths that are not integers', () => {
+  expect(encode({ latitude, longitude }, NaN)).toEqual(null)
+  expect(encode({ latitude, longitude }, 10.5)).toEqual(null)
+  expect(encode({ latitude, longitude }, Infinity)).toEqual(null)
+})
+
 it('caps lengths above 15 at 15', () => {
   expect(encode({ latitude, longitude }, 16)).toEqual('9FFW84J9+XGR7Q44')
   expect(encode({ latitude, longitude }, 100)).toEqual('9FFW84J9+XGR7Q44')
@@ -79,6 +85,7 @@ it('returns null for coordinates that are not finite numbers', () => {
   expect(encode({ latitude, longitude: NaN })).toEqual(null)
   expect(encode({ latitude: Infinity, longitude })).toEqual(null)
   expect(encode({ latitude, longitude: -Infinity })).toEqual(null)
+  expect(encode({ latitude: '59.33abc', longitude: '18.11' })).toEqual(null)
 })
 
 it('it only support even lengths below 10', () => {
