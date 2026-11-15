@@ -21,6 +21,12 @@ describe('isValidCoordinates', () => {
     expect(isValidCoordinates({ latitude: '' } as any)).toBe(false)
   })
 
+  it('should return false if latitude or longitude is not a finite number', () => {
+    expect(isValidCoordinates({ latitude: 'abc', longitude: 1 })).toBe(false)
+    expect(isValidCoordinates({ latitude: 1, longitude: NaN })).toBe(false)
+    expect(isValidCoordinates({ latitude: Infinity, longitude: 1 })).toBe(false)
+  })
+
   it('should return true for valid coordinates', () => {
     const latitude = 59.332438
     const longitude = 18.118813
@@ -83,5 +89,14 @@ describe('parseNum', () => {
   })
   it('parses strings', () => {
     expect(parseNum('3.14')).toBe(3.14)
+    expect(parseNum('-3')).toBe(-3)
+    expect(parseNum(' .5 ')).toBe(0.5)
+    expect(parseNum('1e2')).toBe(100)
+  })
+  it('returns NaN for strings that are not plain numbers', () => {
+    expect(parseNum('')).toBeNaN()
+    expect(parseNum('abc')).toBeNaN()
+    expect(parseNum('59.33abc')).toBeNaN()
+    expect(parseNum('0x1F')).toBeNaN()
   })
 })
