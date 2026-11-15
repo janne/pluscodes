@@ -80,16 +80,16 @@ export const encodeIntegers = (latVal: number, lonVal: number, length: number): 
 }
 
 const encode = (coordinates: Coordinates, length = 10) => {
-  if (length < 2 || length > 15 || (length < PAIR_CODE_LENGTH && length % 2 !== 0)) {
-    return null
-  }
+  if (length < 2 || (length < PAIR_CODE_LENGTH && length % 2 !== 0)) return null
   if (!isValidCoordinates(coordinates)) return null
 
-  const [latVal, lonVal] = locationToIntegers(
-    parseNum(coordinates.latitude),
-    parseNum(coordinates.longitude)
-  )
-  return encodeIntegers(latVal, lonVal, length)
+  const lat = parseNum(coordinates.latitude)
+  const lon = parseNum(coordinates.longitude)
+  if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null
+
+  const [latVal, lonVal] = locationToIntegers(lat, lon)
+  // As in the reference implementation, longer codes are capped at the maximum precision
+  return encodeIntegers(latVal, lonVal, Math.min(length, PAIR_CODE_LENGTH + GRID_CODE_LENGTH))
 }
 
 export default encode

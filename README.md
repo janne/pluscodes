@@ -36,6 +36,7 @@ encode({ latitude: 59.332438, longitude: 18.118813 }) // '9FFW84J9+XG'
 encode({ latitude: 59.332483, longitude: 18.118765 }, 11) // '9FFW84J9+XGR'  (3m × 3m)
 encode({ latitude: 59.332483, longitude: 18.118765 }, 12) // '9FFW84J9+XGR7' (56cm × 87cm)
 encode({ latitude: 59.332483, longitude: 18.118765 }, 15) // '9FFW84J9+XGR7Q44' (4mm × 14mm)
+encode({ latitude: 59.332483, longitude: 18.118765 }, 20) // '9FFW84J9+XGR7Q44' (capped at 15)
 
 // Lower precision codes
 encode({ latitude: 59.332438, longitude: 18.118813 }, 8) // '9FFW84J9+'
