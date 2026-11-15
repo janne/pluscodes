@@ -17,6 +17,8 @@ const expand = (shortCode: string, ref: Coordinates) => {
   // Short codes omit digits from the start, so the separator tells how many are missing
   const prefixLength = SEPARATOR_POSITION - shortCode.indexOf('+')
   if (prefixLength === 0) return shortCode
+  // Padding is only allowed in full codes
+  if (shortCode.includes('0')) return null
 
   const prefixedCode = encode(ref, prefixLength)
   if (!prefixedCode) return null
