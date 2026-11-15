@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "esModuleInterop": true,
     "target": "es6",
-    "module": "node16",
-    "moduleResolution": "node16",
+    "module": "commonjs",
+    "moduleResolution": "bundler",
     "sourceMap": true,
     "rootDir": "./src",
     "outDir": "./dist",
     "strict": true,
-    "types": ["jest", "node"]
+    "types": []
   },
   "include": [
     "src/**/*"
