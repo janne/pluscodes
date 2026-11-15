@@ -78,10 +78,13 @@ const decodeGridCode = (
   return { lat, lon, latRes, lonRes }
 }
 
-const formatCoordinate = (value: number): number => {
-  // Round to 6 decimal places for reasonable precision (~10cm)
+const formatCoordinate = (value: number, resolution: number): number => {
+  // Round to 6 decimal places (~10cm), or more for cells smaller than that, so the
+  // rounding error stays within a quarter of the cell and the point remains inside it
   // Using Math.round instead of toFixed to avoid string conversion overhead
-  return Math.round(value * 1e6) / 1e6
+  const decimals = Math.max(6, Math.ceil(-Math.log10(resolution / 2)))
+  const scale = 10 ** decimals
+  return Math.round(value * scale) / scale
 }
 
 const formatResolution = (value: number): number => {
@@ -112,8 +115,11 @@ const decode = (code: string): DecodedLocation | null => {
   // If no grid digits, return the pair code result
   if (allDigits.length <= PAIR_CODE_LENGTH) {
     // Center the coordinates within the cell
-    const latitude = formatCoordinate(pairLat - LATITUDE_MAX + pairResolution / 2)
-    const longitude = formatCoordinate(pairLon - LONGITUDE_MAX + pairResolution / 2)
+    const latitude = formatCoordinate(pairLat - LATITUDE_MAX + pairResolution / 2, pairResolution)
+    const longitude = formatCoordinate(
+      pairLon - LONGITUDE_MAX + pairResolution / 2,
+      pairResolution
+    )
 
     return {
       latitude,
@@ -128,8 +134,8 @@ const decode = (code: string): DecodedLocation | null => {
   const { lat, lon, latRes, lonRes } = decodeGridCode(pairLat, pairLon, pairResolution, gridDigits)
 
   // Center the coordinates within the final cell
-  const latitude = formatCoordinate(lat - LATITUDE_MAX + latRes / 2)
-  const longitude = formatCoordinate(lon - LONGITUDE_MAX + lonRes / 2)
+  const latitude = formatCoordinate(lat - LATITUDE_MAX + latRes / 2, latRes)
+  const longitude = formatCoordinate(lon - LONGITUDE_MAX + lonRes / 2, lonRes)
 
   return {
     latitude,

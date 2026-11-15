@@ -1,4 +1,5 @@
 import decode from './decode'
+import encode from './encode'
 
 it('returns null for non-string input', () => {
   expect(decode(undefined as any)).toEqual(null)
@@ -47,29 +48,37 @@ it('decodes a 12 digit plus code', () => {
 
 it('decodes a 13 digit plus code', () => {
   expect(decode('9FFW84J9+XGR7H')).toEqual({
-    latitude: 59.332483,
+    latitude: 59.3324825,
     latitudeResolution: 0.000001,
-    longitude: 18.118765,
+    longitude: 18.1187646,
     longitudeResolution: 0.000001953125,
   })
 })
 
 it('decodes a 14 digit plus code', () => {
   expect(decode('9FFW84J9+XGR7HP')).toEqual({
-    latitude: 59.332483,
+    latitude: 59.3324827,
     latitudeResolution: 2e-7,
-    longitude: 18.118765,
+    longitude: 18.1187649,
     longitudeResolution: 4.8828125e-7,
   })
 })
 
 it('decodes a 15 digit plus code', () => {
   expect(decode('9FFW84J9+XGR7HPX')).toEqual({
-    latitude: 59.332483,
+    latitude: 59.33248278,
     latitudeResolution: 4e-8,
-    longitude: 18.118765,
+    longitude: 18.11876508,
     longitudeResolution: 1.2207031e-7,
   })
+})
+
+it('decodes to a point inside the cell for codes of every length', () => {
+  const code = '9FFW83JC+22XXQC4'
+  for (let length = 11; length <= 15; length++) {
+    const prefix = code.slice(0, length + 1)
+    expect(encode(decode(prefix)!, length)).toEqual(prefix)
+  }
 })
 
 it('decodes codes ending with +', () => {
