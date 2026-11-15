@@ -3,11 +3,13 @@
     "declaration": true,
     "esModuleInterop": true,
     "target": "es6",
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "module": "node16",
+    "moduleResolution": "node16",
     "sourceMap": true,
+    "rootDir": "./src",
     "outDir": "./dist",
-    "strict": true
+    "strict": true,
+    "types": ["jest", "node"]
   },
   "include": [
     "src/**/*"
