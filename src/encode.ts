@@ -14,18 +14,22 @@ import {
 
 // Convert to integers in units of the smallest grid cell, as the reference implementation does.
 // All digits are then extracted from the same integers, so they always describe the same cell.
-// As in the reference, a point exactly on a cell edge can still round down to the cell below
-// when the multiplication isn't exact in floating point (e.g. 40.6 * 25000000).
+// Multiplying can land just below a whole number, e.g. 40.6 * 25000000 = 1014999999.9999999,
+// which would put a point on a cell edge into the cell below. Rounding to 6 decimals before
+// flooring avoids that. The reference floors directly and gets a few of its own test cases wrong.
+const toInteger = (value: number, precision: number) =>
+  Math.floor(Math.round(value * precision * 1e6) / 1e6)
+
 const latitudeToInteger = (lat: number) => {
   const max = 2 * LATITUDE_MAX * FINAL_LAT_PRECISION
-  const value = Math.floor(lat * FINAL_LAT_PRECISION) + LATITUDE_MAX * FINAL_LAT_PRECISION
+  const value = toInteger(lat, FINAL_LAT_PRECISION) + LATITUDE_MAX * FINAL_LAT_PRECISION
   // Clamp to the range [-90, 90), so latitude 90 is encoded in the topmost cell
   return Math.max(0, Math.min(value, max - 1))
 }
 
 const longitudeToInteger = (lon: number) => {
   const max = 2 * LONGITUDE_MAX * FINAL_LNG_PRECISION
-  const value = Math.floor(lon * FINAL_LNG_PRECISION) + LONGITUDE_MAX * FINAL_LNG_PRECISION
+  const value = toInteger(lon, FINAL_LNG_PRECISION) + LONGITUDE_MAX * FINAL_LNG_PRECISION
   // Wrap into the range [-180, 180)
   return ((value % max) + max) % max
 }

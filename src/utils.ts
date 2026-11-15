@@ -22,13 +22,3 @@ export const valueToDigit = (x: number) => digits.charAt(x)
 
 export const parseNum = (value: number | string): number =>
   typeof value === 'string' ? parseFloat(value) : value
-
-export const arrayOf = <T>(count: number, fill: T): T[] => {
-  const result = []
-  for (let i = 0; i < count; i++) result.push(fill)
-  return result
-}
-
-export const flatten = <T>(a: T[]) => a.reduce((acc: T[], val: T) => acc.concat(val), [])
-
-export const zip = <T, U>(a: T[], b: U[]) => a.map((e, i) => [e, b[i]])

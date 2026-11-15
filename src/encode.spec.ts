@@ -91,7 +91,7 @@ describe('reference test data', () => {
   // Test cases from the Open Location Code reference implementation
   const rows = fs
     .readFileSync(path.join(__dirname, 'test-data', 'encoding.csv'), 'utf8')
-    .split('\n')
+    .split(/\r?\n/)
     .filter((line) => line && !line.startsWith('#'))
     .map((line) => line.split(','))
     .map(([lat, lng, latInt, lngInt, length, code]) => ({
@@ -105,11 +105,8 @@ describe('reference test data', () => {
     .filter(({ length }) => length >= 2 && length <= 15)
 
   it('converts locations to integers', () => {
-    // As in the reference implementation, floating point precision may give values 1 less
     for (const { lat, lng, latInt, lngInt } of rows) {
-      const [latVal, lngVal] = locationToIntegers(lat, lng)
-      expect([latInt, latInt - 1]).toContain(latVal)
-      expect([lngInt, lngInt - 1]).toContain(lngVal)
+      expect(locationToIntegers(lat, lng)).toEqual([latInt, lngInt])
     }
   })
 
@@ -119,12 +116,9 @@ describe('reference test data', () => {
     }
   })
 
-  it('encodes locations whose integer conversion is exact', () => {
-    for (const { lat, lng, latInt, lngInt, length, code } of rows) {
-      const [latVal, lngVal] = locationToIntegers(lat, lng)
-      if (latVal === latInt && lngVal === lngInt) {
-        expect(encode({ latitude: lat, longitude: lng }, length)).toEqual(code)
-      }
+  it('encodes locations', () => {
+    for (const { lat, lng, length, code } of rows) {
+      expect(encode({ latitude: lat, longitude: lng }, length)).toEqual(code)
     }
   })
 })
