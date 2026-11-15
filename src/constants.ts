@@ -3,6 +3,7 @@
 
 export const ENCODING_BASE = 20
 export const PAIR_CODE_LENGTH = 10
+export const SEPARATOR_POSITION = 8
 export const GRID_ROWS = 5
 export const GRID_COLUMNS = 4
 export const GRID_CODE_LENGTH = 5
