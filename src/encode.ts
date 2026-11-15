@@ -1,15 +1,8 @@
-import {
-  isValidCoordinates,
-  valueToDigit,
-  parseNum,
-  Coordinates,
-  arrayOf,
-  zip,
-  flatten,
-} from './utils'
+import { isValidCoordinates, valueToDigit, parseNum, Coordinates } from './utils'
 import {
   ENCODING_BASE,
   PAIR_CODE_LENGTH,
+  SEPARATOR_POSITION,
   GRID_ROWS,
   GRID_COLUMNS,
   GRID_CODE_LENGTH,
@@ -19,83 +12,67 @@ import {
   FINAL_LNG_PRECISION,
 } from './constants'
 
-type Accumulator = {
-  value: number
-  posValue: number
-  result: string[]
+// Convert to integers in units of the smallest grid cell, as the reference implementation does.
+// All digits are then extracted from the same integers, so they always describe the same cell.
+// As in the reference, a point exactly on a cell edge can still round down to the cell below
+// when the multiplication isn't exact in floating point (e.g. 40.6 * 25000000).
+const latitudeToInteger = (lat: number) => {
+  const max = 2 * LATITUDE_MAX * FINAL_LAT_PRECISION
+  const value = Math.floor(lat * FINAL_LAT_PRECISION) + LATITUDE_MAX * FINAL_LAT_PRECISION
+  // Clamp to the range [-90, 90), so latitude 90 is encoded in the topmost cell
+  return Math.max(0, Math.min(value, max - 1))
 }
 
-const digitReducer = ({ value, result, posValue }: Accumulator) => {
-  const q = Math.floor(value / posValue)
-  return {
-    value: value - q * posValue,
-    posValue: posValue / ENCODING_BASE,
-    result: [...result, valueToDigit(q)],
-  }
+const longitudeToInteger = (lon: number) => {
+  const max = 2 * LONGITUDE_MAX * FINAL_LNG_PRECISION
+  const value = Math.floor(lon * FINAL_LNG_PRECISION) + LONGITUDE_MAX * FINAL_LNG_PRECISION
+  // Wrap into the range [-180, 180)
+  return ((value % max) + max) % max
 }
 
-const encodeAxis = (length: number, value: number): Accumulator =>
-  arrayOf(length, null).reduce(digitReducer, { value, posValue: ENCODING_BASE, result: [] })
-
-const interleave =
-  (length: number) =>
-    (xs: string[], ys: string[]): string => {
-      const zipped = zip(xs, ys)
-      const padding = length > 8 ? [] : arrayOf(8 - length, '0')
-      const digits = [...flatten(zipped), ...padding]
-
-      return [...digits.slice(0, 8), '+', ...digits.slice(8)].join('')
-    }
-
-const clampLatitude = (lat: number) => Math.max(-LATITUDE_MAX, Math.min(LATITUDE_MAX, lat))
-const normalizeLatitude = (lat: number) => clampLatitude(lat) + LATITUDE_MAX
-const normalizeLongitude = (lon: number) => {
-  let normalized = lon % (2 * LONGITUDE_MAX)
-  if (normalized < -LONGITUDE_MAX) normalized += 2 * LONGITUDE_MAX
-  if (normalized >= LONGITUDE_MAX) normalized -= 2 * LONGITUDE_MAX
-  return normalized + LONGITUDE_MAX
-}
-
-const encodePairCode = (lat: number, lon: number, length: number): string => {
-  const normalizedLat = normalizeLatitude(lat)
-  const normalizedLon = normalizeLongitude(lon)
-  const latAcc = encodeAxis(length / 2, normalizedLat)
-  const lonAcc = encodeAxis(length / 2, normalizedLon)
-  return interleave(length)(latAcc.result, lonAcc.result)
-}
-
-const encodeGridCode = (lat: number, lon: number, gridLength: number): string => {
-  // Convert to high-precision integers
-  let latVal = Math.floor(lat * FINAL_LAT_PRECISION)
-  latVal = Math.max(0, Math.min(latVal + LATITUDE_MAX * FINAL_LAT_PRECISION, 2 * LATITUDE_MAX * FINAL_LAT_PRECISION - 1))
-
-  let lonVal = Math.floor(lon * FINAL_LNG_PRECISION)
-  lonVal += LONGITUDE_MAX * FINAL_LNG_PRECISION
-
-  // Normalize longitude to valid range
-  const maxLonVal = 2 * LONGITUDE_MAX * FINAL_LNG_PRECISION
-  if (lonVal < 0 || lonVal >= maxLonVal) {
-    lonVal = ((lonVal % maxLonVal) + maxLonVal) % maxLonVal
-  }
-
-  // Divide out unused grid precision
-  const unusedDigits = GRID_CODE_LENGTH - gridLength
-  if (unusedDigits > 0) {
-    latVal = Math.floor(latVal / (GRID_ROWS ** unusedDigits))
-    lonVal = Math.floor(lonVal / (GRID_COLUMNS ** unusedDigits))
-  }
-
+const encodeGridCode = (latVal: number, lonVal: number): string => {
   // Extract grid digits (from least to most significant)
   const digits: string[] = []
-  for (let i = 0; i < gridLength; i++) {
+  for (let i = 0; i < GRID_CODE_LENGTH; i++) {
     const latDigit = latVal % GRID_ROWS
-    const lngDigit = lonVal % GRID_COLUMNS
-    digits.unshift(valueToDigit(latDigit * GRID_COLUMNS + lngDigit))
+    const lonDigit = lonVal % GRID_COLUMNS
+    digits.unshift(valueToDigit(latDigit * GRID_COLUMNS + lonDigit))
     latVal = Math.floor(latVal / GRID_ROWS)
     lonVal = Math.floor(lonVal / GRID_COLUMNS)
   }
-
   return digits.join('')
+}
+
+const encodePairCode = (latVal: number, lonVal: number): string => {
+  // Extract pair digits (from least to most significant), interleaving latitude and longitude
+  const digits: string[] = []
+  for (let i = 0; i < PAIR_CODE_LENGTH / 2; i++) {
+    digits.unshift(valueToDigit(lonVal % ENCODING_BASE))
+    digits.unshift(valueToDigit(latVal % ENCODING_BASE))
+    latVal = Math.floor(latVal / ENCODING_BASE)
+    lonVal = Math.floor(lonVal / ENCODING_BASE)
+  }
+  return digits.join('')
+}
+
+// Convert a location to integers in units of the smallest grid cell
+export const locationToIntegers = (lat: number, lon: number): [number, number] => [
+  latitudeToInteger(lat),
+  longitudeToInteger(lon),
+]
+
+// Encode a location given as integers from locationToIntegers
+export const encodeIntegers = (latVal: number, lonVal: number, length: number): string => {
+  // Encode all 15 digits, then cut the code to the requested length
+  const pairCode = encodePairCode(
+    Math.floor(latVal / GRID_ROWS ** GRID_CODE_LENGTH),
+    Math.floor(lonVal / GRID_COLUMNS ** GRID_CODE_LENGTH)
+  )
+  const digits = (pairCode + encodeGridCode(latVal, lonVal)).slice(0, length)
+  const padding = '0'.repeat(Math.max(0, SEPARATOR_POSITION - digits.length))
+  const padded = digits + padding
+
+  return `${padded.slice(0, SEPARATOR_POSITION)}+${padded.slice(SEPARATOR_POSITION)}`
 }
 
 const encode = (coordinates: Coordinates, length = 10) => {
@@ -104,21 +81,11 @@ const encode = (coordinates: Coordinates, length = 10) => {
   }
   if (!isValidCoordinates(coordinates)) return null
 
-  const lat = parseNum(coordinates.latitude)
-  const lon = parseNum(coordinates.longitude)
-
-  // Encode the first 10 digits (pair code)
-  const pairLength = Math.min(length, PAIR_CODE_LENGTH)
-  const pairCode = encodePairCode(lat, lon, pairLength)
-
-  // If we need more precision, add grid digits (11-15)
-  if (length > PAIR_CODE_LENGTH) {
-    const gridLength = length - PAIR_CODE_LENGTH
-    const gridCode = encodeGridCode(lat, lon, gridLength)
-    return pairCode + gridCode
-  }
-
-  return pairCode
+  const [latVal, lonVal] = locationToIntegers(
+    parseNum(coordinates.latitude),
+    parseNum(coordinates.longitude)
+  )
+  return encodeIntegers(latVal, lonVal, length)
 }
 
 export default encode

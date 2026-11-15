@@ -1,4 +1,6 @@
-import encode from './encode'
+import fs from 'fs'
+import path from 'path'
+import encode, { encodeIntegers, locationToIntegers } from './encode'
 
 const latitude = 59.332483
 const longitude = 18.118765
@@ -72,4 +74,57 @@ it('it only support even lengths below 10', () => {
   expect(encode({ latitude, longitude }, 5)).toEqual(null)
   expect(encode({ latitude, longitude }, 7)).toEqual(null)
   expect(encode({ latitude, longitude }, 9)).toEqual(null)
+})
+
+it('clamps latitudes of 90 and above to the topmost cell', () => {
+  expect(encode({ latitude: 90, longitude: 1 }, 10)).toEqual('CFX3X2X2+X2')
+  expect(encode({ latitude: 90.1, longitude: 1 }, 10)).toEqual('CFX3X2X2+X2')
+})
+
+it('encodes points on cell edges into the upper cell', () => {
+  expect(encode({ latitude: 35.6, longitude: 3.033 }, 10)).toEqual('8F75J22M+26')
+  expect(encode({ latitude: 35.6, longitude: 3.033 }, 11)).toEqual('8F75J22M+262')
+  expect(encode({ latitude: -48.71, longitude: 142.78 }, 8)).toEqual('4R347QRJ+')
+})
+
+describe('reference test data', () => {
+  // Test cases from the Open Location Code reference implementation
+  const rows = fs
+    .readFileSync(path.join(__dirname, 'test-data', 'encoding.csv'), 'utf8')
+    .split('\n')
+    .filter((line) => line && !line.startsWith('#'))
+    .map((line) => line.split(','))
+    .map(([lat, lng, latInt, lngInt, length, code]) => ({
+      lat: Number(lat),
+      lng: Number(lng),
+      latInt: Number(latInt),
+      lngInt: Number(lngInt),
+      length: Number(length),
+      code,
+    }))
+    .filter(({ length }) => length >= 2 && length <= 15)
+
+  it('converts locations to integers', () => {
+    // As in the reference implementation, floating point precision may give values 1 less
+    for (const { lat, lng, latInt, lngInt } of rows) {
+      const [latVal, lngVal] = locationToIntegers(lat, lng)
+      expect([latInt, latInt - 1]).toContain(latVal)
+      expect([lngInt, lngInt - 1]).toContain(lngVal)
+    }
+  })
+
+  it('encodes integers', () => {
+    for (const { latInt, lngInt, length, code } of rows) {
+      expect(encodeIntegers(latInt, lngInt, length)).toEqual(code)
+    }
+  })
+
+  it('encodes locations whose integer conversion is exact', () => {
+    for (const { lat, lng, latInt, lngInt, length, code } of rows) {
+      const [latVal, lngVal] = locationToIntegers(lat, lng)
+      if (latVal === latInt && lngVal === lngInt) {
+        expect(encode({ latitude: lat, longitude: lng }, length)).toEqual(code)
+      }
+    }
+  })
 })
