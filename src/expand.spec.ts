@@ -52,3 +52,17 @@ it('returns null for short codes with padding', () => {
 it('returns the code for full codes with padding', () => {
   expect(expand('9FFW8400+', coords)).toEqual('9FFW8400+')
 })
+
+it('does not move the code past the poles', () => {
+  // Test cases from the Open Location Code reference implementation
+  expect(expand('2222+22', { latitude: 89.6, longitude: 0 })).toEqual('CFX22222+22')
+  expect(expand('XXXXXX+XX', { latitude: -81, longitude: 0 })).toEqual('2CXXXXXX+XX')
+  expect(expand('FRFH3P+3MP', { latitude: 90, longitude: -63.593481 })).toEqual('C7FRFH3P+3MP')
+  expect(expand('M7JP+QG', { latitude: -90, longitude: -117.735155 })).toEqual('2524M7JP+QG')
+})
+
+it('normalizes the reference longitude', () => {
+  expect(expand('W5H36M+9VGM', { latitude: 28.705625, longitude: 180 })).toEqual('72W5H36M+9VGM')
+  expect(expand('W5H36M+9VGM', { latitude: 28.705625, longitude: -540 })).toEqual('72W5H36M+9VGM')
+  expect(expand('84J9+XG', { latitude: 59.329394, longitude: 378.068712 })).toEqual('9FFW84J9+XG')
+})
