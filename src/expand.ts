@@ -1,14 +1,21 @@
 import encode from './encode'
 import decode from './decode'
 import { isValidCoordinates, isValidCode, parseNum, Coordinates } from './utils'
-import { SEPARATOR_POSITION } from './constants'
+import { SEPARATOR_POSITION, LATITUDE_MAX, LONGITUDE_MAX } from './constants'
 
-const adjust = (axis: number, refAxis: string | number, resolution: number) => {
-  const refFloat = parseNum(refAxis)
-  if (axis > refFloat + resolution / 2) return axis - resolution
-  if (axis < refFloat - resolution / 2) return axis + resolution
+// Move the decoded value by one cell towards the reference when it is more than half a cell
+// away, as long as the moved cell stays within [min, max]
+const adjust = (axis: number, ref: number, resolution: number, min = -Infinity, max = Infinity) => {
+  if (axis <= ref - resolution / 2 && axis + resolution <= max) return axis + resolution
+  if (axis > ref + resolution / 2 && axis - resolution >= min) return axis - resolution
   return axis
 }
+
+const clipLatitude = (lat: number) => Math.min(Math.max(lat, -LATITUDE_MAX), LATITUDE_MAX)
+
+const normalizeLongitude = (lon: number) =>
+  ((((lon + LONGITUDE_MAX) % (2 * LONGITUDE_MAX)) + 2 * LONGITUDE_MAX) % (2 * LONGITUDE_MAX)) -
+  LONGITUDE_MAX
 
 const expand = (shortCode: string, ref: Coordinates) => {
   if (!isValidCode(shortCode)) return null
@@ -31,10 +38,13 @@ const expand = (shortCode: string, ref: Coordinates) => {
   const resolution = Math.pow(20, 2 - prefixLength / 2)
   const length = code.length - 1
 
+  const refLatitude = clipLatitude(parseNum(ref.latitude))
+  const refLongitude = normalizeLongitude(parseNum(ref.longitude))
+
   return encode(
     {
-      latitude: adjust(latitude, ref.latitude, resolution),
-      longitude: adjust(longitude, ref.longitude, resolution),
+      latitude: adjust(latitude, refLatitude, resolution, -LATITUDE_MAX, LATITUDE_MAX),
+      longitude: adjust(longitude, refLongitude, resolution),
     },
     length,
   )
